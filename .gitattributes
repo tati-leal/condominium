@@ -4,3 +4,4 @@
 *.dae filter=lfs diff=lfs merge=lfs -text
 *GE23.skp filter=lfs diff=lfs merge=lfs -text
 *EXPAN.skp filter=lfs diff=lfs merge=lfs -text
+*DW06.skp filter=lfs diff=lfs merge=lfs -text
