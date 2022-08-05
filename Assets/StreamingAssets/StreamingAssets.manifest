@@ -1,16 +1,16 @@
 ManifestFileVersion: 0
-CRC: 516778943
+CRC: 2408231200
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: femalecharacter
+      Name: dw06
       Dependencies: {}
     Info_1:
       Name: malecharacter
       Dependencies: {}
     Info_2:
-      Name: adventurercharacter
+      Name: femalecharacter
       Dependencies: {}
     Info_3:
-      Name: dw06
+      Name: adventurercharacter
       Dependencies: {}
