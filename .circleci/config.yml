@@ -1,27 +1,35 @@
 version: 2.1
 
-orbs:
-  unity: game-ci/unity@0.2.2
-
-jobs:
-  build_asset_bundles:
+executors:
+  unity_exec:
     docker:
-      - image: cimg/base:stable
-    steps:
-      - unity/prepare-env
-      - checkout
-      - run:
-          #working_directory: ~/project/App.Tests
-          name: Build Asset Bundles
-          command: |
-            /Applications/Unity/Hub/Editor/2022/Unity.app/Contents/Linux/Unity -batchmode -projectPath "./" -executeMethod CustomUnityCli.BuildAssetBundles -quit -logFile /dev/stdout
-      - run:
-          #working_directory: ~/project/App.Tests
-          name: Upload Assetbundles
-          command: |
-            python3 upload_asset_bundles.py
-    
+      - image: gableroux/unity3d:2018.4.5f1-android
+    environment:
+      BUILD_NAME: my_build_name
+
+.build: &build
+  executor: unity_exec
+  steps:
+    - checkout
+    - run: 
+        name: step 1
+        command: /Applications/Unity/Hub/Editor/2022/Unity.app/Contents/Linux/Unity -batchmode -projectPath "./" -executeMethod CustomUnityCli.BuildAssetBundles -quit -logFile /dev/stdout
+    - run:
+        name: step 2
+        command: python3 upload_asset_bundles.py
+    # - run: 
+    #     name: Zipping build
+    #     command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
+    # - store_artifacts:
+    #     path: build.zip
+jobs:
+  build_android:
+    <<: *build
+    environment:
+      BUILD_TARGET: Android
+          
 workflows:
-  asset-bundles-workflow:
+  version: 2
+  build:
     jobs:
-      - build_asset_bundles
+      - build_android
