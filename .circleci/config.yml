@@ -15,7 +15,7 @@ jobs:
       #- checkout
       - run:
           name: "Download latest skp files"
-          command: "curl -s https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/ | python -c \"import sys, json; print json.load(sys.stdin)['data']\""
+          command: "curl -s https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/ | jq '.items'"
       - run:
           name: "Validate skp files"
           command: "echo Validate skp files"
