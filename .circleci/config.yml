@@ -14,10 +14,10 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
+      #- checkout
       - run:
           name: "Download latest skp files"
-          command: "curl https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/"
+          command: "curl https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/GE23_test.skp"
       - run:
           name: "Validate skp files"
           command: "echo Validate skp files"
