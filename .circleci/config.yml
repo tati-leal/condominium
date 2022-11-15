@@ -15,22 +15,22 @@ jobs:
       - checkout
       - run:
           name: "Download latest skp files"
-          command: ""
+          command: "echo Download latest skp files"
       - run:
           name: "Validate skp files"
-          command: ""
+          command: "echo Validate skp files"
       - run:
           name: "Generate prefabs with coordinates"
-          command: ""
+          command: "echo Generate prefabs with coordinates"
       - run:
           name: "Build Asset Bundles"
-          command: ""
+          command: "echo Build Asset Bundles"
       - run:
           name: "Upload Asset Bundles"
-          command: ""
+          command: "echo Upload Asset Bundles"
       - run:
           name: "Save Asset Bundle artifact"
-          command: ""
+          command: "echo Save Asset Bundle artifact"
 
 
 # Invoke jobs via workflows
