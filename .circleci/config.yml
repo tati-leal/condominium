@@ -1,35 +1,26 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
-executors:
-  unity_exec:
-    docker:
-      - image: gableroux/unity3d:2018.4.5f1-android
-    environment:
-      BUILD_NAME: my_build_name
-
-.build: &build
-  executor: unity_exec
-  steps:
-    - checkout
-    - run: 
-        name: step 1
-        command: /Applications/Unity/Hub/Editor/2022/Unity.app/Contents/Linux/Unity -batchmode -projectPath "./" -executeMethod CustomUnityCli.BuildAssetBundles -quit -logFile /dev/stdout
-    - run:
-        name: step 2
-        command: python3 upload_asset_bundles.py
-    # - run: 
-    #     name: Zipping build
-    #     command: apt update && apt -y install zip && zip -r "build.zip" ./Builds/
-    # - store_artifacts:
-    #     path: build.zip
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build_android:
-    <<: *build
-    environment:
-      BUILD_TARGET: Android
-          
+  say-hello:
+    # Specify the execution environment. You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/2.0/configuration-reference/#docker-machine-macos-windows-executor
+    docker:
+      - image: cimg/base:stable
+    # Add steps to the job
+    # See: https://circleci.com/docs/2.0/configuration-reference/#steps
+    steps:
+      - checkout
+      - run:
+          name: "Say hello"
+          command: "echo Hello, World!"
+
+# Invoke jobs via workflows
+# See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  version: 2
-  build:
+  say-hello-workflow:
     jobs:
-      - build_android
+      - say-hello
