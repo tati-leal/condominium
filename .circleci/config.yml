@@ -14,8 +14,17 @@ jobs:
     steps:
       #- checkout
       - run:
+          name: "setting up environment variables"
+          command: echo 'export SKP_FILE_NAME=""'
+      - run:
+          name: "Retrieve skp file name from firebase"
+          command: ${SKP_FILE_NAME}=$(curl -s https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/ | jq '.items.name')
+      - run:
+          name: "Echo filename"
+          command: echo ${SKP_FILE_NAME}
+      - run:
           name: "Download latest skp files"
-          command: "curl -s https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/ | jq '.items'"
+          command: "curl -s https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/ | jq '.items.name'"
       - run:
           name: "Validate skp files"
           command: "echo Validate skp files"
