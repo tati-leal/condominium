@@ -13,7 +13,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      #- checkout
+      - checkout
       - run:
           name: "1"
           command: |
@@ -23,15 +23,10 @@ jobs:
             curl -o "/tmp/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - store_artifacts:
           path: /tmp
-      - run:
-          name: "Validate skp files"
-          command: "echo Validate skp files"
-      - run:
-          name: "Generate prefabs with coordinates"
-          command: "echo Generate prefabs with coordinates"
-      - run:
-          name: "Build Asset Bundles"
-          command: "echo Build Asset Bundles"
+      - unity/build:
+          build-target: iOS 
+          step-name: Build Asset Bundle 
+          build-method: CustomUnityCli.BuildAssetBundles
       - run:
           name: "Upload Asset Bundles"
           command: "echo Upload Asset Bundles"
