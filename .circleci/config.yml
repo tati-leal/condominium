@@ -31,8 +31,11 @@ jobs:
       #    name: Install XVFB
       #    command: sudo apt-get install xvfb
       - run:
-          name: Install Unity
-          command: brew install --cask unity
+          name: Install Unity-hub
+          command: |
+            brew install --cask unity-hub
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules
+            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -batchmode -quit -nographics -username $UNITY_USERNAME -password $UNITY_PASSWORD -serial F4-QEZA-SJSY-PKB3-FBGV-YDBV -logfile /dev/stdout -executeMethod CustomUnityCli.BuildAssetBundles GE23_test.skp
       #- unity/build:
       #    build-target: iOS
       #    step-name: Build Asset Bundle 
@@ -56,13 +59,13 @@ workflows:
   generate-asset-bundle-workflow:
       jobs:
         - build-asset-bundles
-        - unity/build:
-            build-target: iOS 
-            custom-parameters: -executrMethod CustomUnityCli.BuildAssetBundles GE23_test.skp
-            executor:
-              editor_version: 2021.3.1f1
-              name: unity/macos
-              resource_class: medium
-            unity-license-var-name: UNITY_ENCODED_LICENSE 
-            unity-password-var-name: UNITY_PASSWORD 
-            unity-username-var-name: UNITY_USERNAME 
+        #- unity/build:
+        #    build-target: iOS 
+        #    custom-parameters: -executrMethod CustomUnityCli.BuildAssetBundles GE23_test.skp
+        #    executor:
+        #      editor_version: 2021.3.1f1
+        #      name: unity/macos
+        #      resource_class: medium
+        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
+        #    unity-password-var-name: UNITY_PASSWORD 
+        #    unity-username-var-name: UNITY_USERNAME 
