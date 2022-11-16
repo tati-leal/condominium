@@ -30,6 +30,9 @@ jobs:
       - run:
           name: Install XVFB
           command: sudo apt-get install xvfb
+      - run:
+          name: Install Unity
+          command: brew install --cask unity
       - unity/build:
           build-target: iOS
           step-name: Build Asset Bundle 
