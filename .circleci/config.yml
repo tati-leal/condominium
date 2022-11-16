@@ -33,12 +33,11 @@ jobs:
       - run:
           name: Install unity-hub
           command: brew install --cask unity-hub
-      - run:
+      - run:    
           name: Install Unity
           command: |
-              echo "Installing Unity v2021.3.1f1"
-              '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules
-              echo "Unity v2021.3.1f1 Installed"
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules && echo "Unity Installed"
+            echo "Unity Installed"
       - unity/build:
           build-target: iOS
           step-name: Build Asset Bundle 
