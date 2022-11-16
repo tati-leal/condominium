@@ -47,7 +47,7 @@ jobs:
       - run:
           name: b
           command: |
-            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -quit -batchmode -nographics -projectPath /Users/distiller/project/. -buildTarget iOS -customBuildTarget iOS -customBuildPath /Users/distiller/project/./Builds/iOS/iOS -executeMethod CustomUnityCli.BuildAssetBundles -buildVersion 1.0.0 -logfile /dev/stdout FILE_NAME.skp
+            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath /Users/distiller/project/. -executeMethod CustomUnityCli.BuildAssetBundles FILE_NAME.skp -quit -logFile /dev/stdout
       - run:
           name: "Upload Asset Bundles"
           command: "echo Upload Asset Bundles"
