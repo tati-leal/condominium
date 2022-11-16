@@ -30,10 +30,10 @@ jobs:
       #- run:
       #    name: Install XVFB
       #    command: sudo apt-get install xvfb
-      #- run:
-      #    name: Install Unity-hub
-      #    command: |
-      #      brew install --cask unity-hub
+      - run:
+          name: Install Unity-hub
+          command: |
+            brew install --cask unity-hub
       - run:    
           name: Install Unity
           command: |
