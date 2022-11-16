@@ -18,21 +18,21 @@ jobs:
     #  - image: cimg/base:stable
     steps:
       #- checkout
-      - run:
-          name: "Download skp file"
-          command: |
-            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
-            export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
-            echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            curl -o "/tmp/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+      #- run:
+      #    name: "Download skp file"
+      #    command: |
+      #      export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
+      #      export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
+      #      echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+      #      curl -o "/tmp/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - store_artifacts:
           path: /tmp
       #- run:
       #    name: Install XVFB
       #    command: sudo apt-get install xvfb
-      #- run:
-      #    name: Install Unity
-      #    command: brew install --cask unity
+      - run:
+          name: Install Unity
+          command: brew install --cask unity
       #- unity/build:
       #    build-target: iOS
       #    step-name: Build Asset Bundle 
@@ -58,10 +58,9 @@ workflows:
         - build-asset-bundles
         - unity/build:
             build-target: iOS 
-            build-method: CustomUnityCli.BuildAssetBundles
-            custom-parameters: GE23_test.skp
+            custom-parameters: -executrMethod CustomUnityCli.BuildAssetBundles GE23_test.skp
             executor:
-              editor_version: 2021.3.13f1
+              editor_version: 2022.1.23
               name: unity/macos
               resource_class: medium
             unity-license-var-name: UNITY_ENCODED_LICENSE 
