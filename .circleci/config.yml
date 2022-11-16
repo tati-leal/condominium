@@ -15,10 +15,10 @@ jobs:
       #- checkout
       - run:
           name: "Retrieving skp file name"
-          command: echo $(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name') >> $SKP_FILE_NAME
+          command: export SKP_FILE_NAME && echo $(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name') >> $SKP_FILE_NAME
       - run:
           name: "Retrieving skp file download token"
-          command: echo $(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens') >> $SKP_FILE_DOWNLOAD_TOKEN
+          command: export SKP_FILE_DOWNLOAD_TOKEN && echo $(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens') >> $SKP_FILE_DOWNLOAD_TOKEN
       - run:
           name: "Echoes"
           command: echo $SKP_FILE_NAME && echo $SKP_FILE_DOWNLOAD_TOKEN
