@@ -37,6 +37,7 @@ jobs:
           name: Install Unity
           command: |
               '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules
+              echo "Unity Installed"
       - unity/build:
           build-target: iOS
           step-name: Build Asset Bundle 
