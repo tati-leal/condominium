@@ -25,7 +25,7 @@ jobs:
           path: /tmp
       - run:
           name: Install XVFB
-          command: apt-get install xvfb
+          command: sudo apt-get install xvfb
       - unity/build:
           build-target: iOS 
           step-name: Build Asset Bundle 
