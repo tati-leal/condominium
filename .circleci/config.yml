@@ -61,7 +61,7 @@ workflows:
             build-method: CustomUnityCli.BuildAssetBundles
             custom-parameters: GE23_test.skp
             executor:
-              editor_version: 2022.1.23
+              editor_version: 2022.1.2
               name: unity/macos
               resource_class: medium
             unity-license-var-name: UNITY_ENCODED_LICENSE 
