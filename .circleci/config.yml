@@ -13,7 +13,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
+      #- checkout
       - run:
           name: "Download skp file"
           command: |
@@ -26,19 +26,19 @@ jobs:
       - run:
           name: Install XVFB
           command: sudo apt-get install xvfb
-      #- unity/build:
-      #    build-target: iOS
-      #    step-name: Build Asset Bundle 
-      #    build-method: CustomUnityCli.BuildAssetBundles
-      #- run:
-      #    name: "Upload Asset Bundles"
-      #    command: "echo Upload Asset Bundles"
-      #- run:
-      #    name: "Delete skp file from cloud"
-      #    command: "echo Delete skp file from cloud"
-      #- run:
-      #    name: "Save Asset Bundle artifact"
-      #    command: "echo Save Asset Bundle artifact"
+      - unity/build:
+          build-target: iOS
+          step-name: Build Asset Bundle 
+          build-method: CustomUnityCli.BuildAssetBundles
+      - run:
+          name: "Upload Asset Bundles"
+          command: "echo Upload Asset Bundles"
+      - run:
+          name: "Delete skp file from cloud"
+          command: "echo Delete skp file from cloud"
+      - run:
+          name: "Save Asset Bundle artifact"
+          command: "echo Save Asset Bundle artifact"
 
 
 # Invoke jobs via workflows
@@ -47,11 +47,11 @@ workflows:
   generate-asset-bundle-workflow:
       jobs:
         - build-asset-bundles
-        - unity/build:
-            build-target: iOS 
-            build-method: CustomUnityCli.BuildAssetBundles
-            executor:
-              editor_version: 2021.3.1f1
-              name: unity/ubuntu
-              resource_class: small
-              target_platform: linux-il2cpp
+        #- unity/build:
+        #    build-target: iOS 
+        #    build-method: CustomUnityCli.BuildAssetBundles
+        #    executor:
+        #      editor_version: 2021.3.1f1
+        #      name: unity/ubuntu
+        #      resource_class: small
+        #      target_platform: linux-il2cpp
