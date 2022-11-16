@@ -38,15 +38,21 @@ jobs:
           command: |
             '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules && echo "Unity Installed"
             echo "Unity Installed"
-      - unity/build:
-          build-target: iOS
-          step-name: Build Asset Bundle 
-          build-method: CustomUnityCli.BuildAssetBundles
-          custom-parameters: FILE_NAME.skp
-          project-path: .
+      #- unity/build:
+      #    build-target: iOS
+      #    step-name: Build Asset Bundle 
+      #    build-method: CustomUnityCli.BuildAssetBundles
+      #    custom-parameters: FILE_NAME.skp
+      #    project-path: .
       - run:
           name: a
-          command: /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/Resources/PackageManager/Server/UnityPackageManager
+          command: |
+            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/Resources/PackageManager/Server/UnityPackageManager
+      - run:
+          name: b
+          command: |
+            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -quit -batchmode -nographics -projectPath /Users/distiller/project/. -buildTarget iOS -customBuildTarget iOS -customBuildPath /Users/distiller/project/./Builds/iOS/iOS -executeMethod CustomUnityCli.BuildAssetBundles -buildVersion 1.0.0 -logfile /dev/stdout FILE_NAME.skp
+      
       - run:
           name: "Upload Asset Bundles"
           command: "echo Upload Asset Bundles"
