@@ -30,6 +30,8 @@ jobs:
           build-target: iOS
           step-name: Build Asset Bundle 
           build-method: CustomUnityCli.BuildAssetBundles
+          custom-parameters: FILE_NAME.skp
+          project-path: .
       - run:
           name: "Upload Asset Bundles"
           command: "echo Upload Asset Bundles"
