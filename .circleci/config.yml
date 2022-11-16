@@ -18,9 +18,12 @@ jobs:
           command: export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name') && echo $SKP_FILE_NAME
       - run:
           name: "2"
-          command: export SKP_FILE_TOKEN=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}' | jq '.downloadTokens') && echo $SKP_FILE_TOKEN
+          command: echo $SKP_FILE_NAME
       - run:
           name: "3"
+          command: export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens') && echo $SKP_FILE_TOKEN
+      - run:
+          name: "4"
           command: $(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - run:
           name: "Validate skp files"
