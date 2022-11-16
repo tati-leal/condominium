@@ -32,7 +32,7 @@ jobs:
       #    command: sudo apt-get install xvfb
       - run:
           name: Install unity-hub
-          command: brew install --cask unity
+          command: brew install --cask unity-hub
       - run:
           name: Install Unity
           command: |
