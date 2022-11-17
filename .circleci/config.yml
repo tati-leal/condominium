@@ -45,8 +45,13 @@ workflows:
       jobs:
         - unity/create-activation-file:
             name: "create-activation-file"
-        - download-skp-file
-        - teeeest
+        - download-skp-file:
+            context:
+              - condominium
+        - teeeest:
+            context:
+              - condominium
+
         #- unity/build:
         #    name: "Build Asset Bundles"
         #    build-target: StandaloneLinux64
