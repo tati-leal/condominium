@@ -16,7 +16,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      - checkout
+      #- checkout
       - run:
           name: "Download skp file"
           command: |
