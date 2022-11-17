@@ -48,6 +48,8 @@ workflows:
         - teeeest:
             context:
               - condominium
+            requires:
+              - download-skp-file
         - download-skp-file:
             context:
               - condominium
