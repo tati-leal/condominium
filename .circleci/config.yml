@@ -30,7 +30,7 @@ jobs:
           environment:
             FILE_NAME: $FILE_NAME
       - run:
-          name: "test"
+          name: "test inside same workflow"
           command: echo $FILE_NAME
   teeeest:
     docker:
@@ -39,10 +39,7 @@ jobs:
       - store_artifacts:
           path: /tmp
       - run:
-          name: "Teeest"
-          command: printenv FILE_NAME
-      - run:
-          name: "Teeest"
+          name: "test outside workflow"
           command: echo $FILE_NAME
 
 # Invoke jobs via workflows
