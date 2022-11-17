@@ -51,8 +51,8 @@ jobs:
       - run:
           name: "Upload Asset Bundles"
           command: |
-            echo $BASH_ENV
             printenv FILE_NAME
+            echo $FILE_NAME
       - run:
           name: "Delete skp file"
           command: "echo Delete skp file"
