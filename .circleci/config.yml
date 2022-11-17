@@ -24,7 +24,6 @@ jobs:
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            ls
       - store_artifacts:
           path: /tmp
       #- run:
@@ -52,8 +51,11 @@ jobs:
           name: "Upload Asset Bundles"
           command: "echo Upload Asset Bundles"
       - run:
-          name: "Delete skp file from cloud"
-          command: "echo Delete skp file from cloud"
+          name: "Delete skp file"
+          command: "echo Delete skp file"
+      - run:
+          name: "Delete skp file from firebase"
+          command: "echo Delete skp file from firebase"
       - run:
           name: "Save Asset Bundle artifact"
           command: "echo Save Asset Bundle artifact"
