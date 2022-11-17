@@ -18,7 +18,7 @@ jobs:
     steps:
       - store_artifacts:
           path: /tmp
-      - checkout
+      #- checkout
       - run:
           name: "Download skp file"
           command: |
