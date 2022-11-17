@@ -45,10 +45,10 @@ workflows:
       jobs:
         - unity/create-activation-file:
             name: "create-activation-file"
-        - download-skp-file:
+        - teeeest:
             context:
               - condominium
-        - teeeest:
+        - download-skp-file:
             context:
               - condominium
 
