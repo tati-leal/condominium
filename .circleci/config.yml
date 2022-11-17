@@ -64,6 +64,9 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
+        - unity/create-activation-file:
+            name: "create-activation-file"
+            
         - build-asset-bundles
         - unity/build:
             name: "Build Asset Bundles"
