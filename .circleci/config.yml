@@ -29,6 +29,9 @@ jobs:
           #  curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
           environment:
             FILE_NAME: $FILE_NAME
+      - run:
+          name: "test"
+          command: echo $FILE_NAME
   teeeest:
     docker:
       - image: cimg/base:stable
