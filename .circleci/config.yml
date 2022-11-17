@@ -27,6 +27,7 @@ jobs:
             ls -d ./Assets/Resources/Models/Buildings/*
             ls -d ./Assets/StreamingAssets/*
             echo "${SKP_FILE_NAME}" >> $BASH_ENV
+            echo $BASH_ENV
       - store_artifacts:
           path: /tmp
       #- run:
@@ -52,7 +53,9 @@ jobs:
       #      /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath /Users/distiller/project/. -executeMethod CustomUnityCli.BuildAssetBundles FILE_NAME.skp -quit -logFile /dev/stdout
       - run:
           name: "Upload Asset Bundles"
-          command: printenv SKP_FILE_NAME
+          command: |
+            echo $BASH_ENV
+            printenv SKP_FILE_NAME
       - run:
           name: "Delete skp file"
           command: "echo Delete skp file"
