@@ -22,7 +22,11 @@ workflows:
                     export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
                     echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
                     echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-                  #  curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+                    curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+            post-steps:
+              - run:
+                  name: "Dir"
+                  command: ls
             name: "Build Asset Bundles"
             build-target: iOS
             build-method: CustomUnityCli.BuildAssetBundles
