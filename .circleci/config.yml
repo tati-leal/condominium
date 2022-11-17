@@ -16,7 +16,9 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      #- checkout
+      - store_artifacts:
+          path: /tmp
+      - checkout
       - run:
           name: "Download skp file"
           command: |
@@ -24,74 +26,29 @@ jobs:
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-      #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      - store_artifacts:
-          path: /tmp
-      #- run:
-      #    name: Install XVFB
-      #    command: sudo apt-get install xvfb
-      #- run:
-      #    name: Install unity-hub
-      #    command: brew install --cask unity-hub
-      #- run:    
-      #    name: Install Unity
-      #    command: |
-      #      '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version 2021.3.1f1 --changeset 3b70a0754835 --module mac-il2cpp --childModules && echo "Unity Installed"
-      #      echo "Unity Installed"
-      #- unity/build:
-      #    build-target: iOS
-      #    step-name: Build Asset Bundle 
-      #    build-method: CustomUnityCli.BuildAssetBundles
-      #    custom-parameters: FILE_NAME.skp
-      #    project-path: ./
-      #- run:
-      #    name: b
-      #    command: |
-      #      /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath /Users/distiller/project/. -executeMethod CustomUnityCli.BuildAssetBundles FILE_NAME.skp -quit -logFile /dev/stdout
-      - run:
-          name: "Upload Asset Bundles"
-          command: |
-            printenv FILE_NAME
-            echo $FILE_NAME
-      - run:
-          name: "Delete skp file"
-          command: "echo Delete skp file"
-      - run:
-          name: "Delete skp file from firebase"
-          command: "echo Delete skp file from firebase"
-      - run:
-          name: "Save Asset Bundle artifact"
-          command: "echo Save Asset Bundle artifact"
-  wrapup:
-    docker:
-      - image: cimg/base:stable
-    steps:
-      - run:
-          name: "Retrieve environment variable"
-          command: echo $SKP_FILE_NAME
+            curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
           
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        #- unity/create-activation-file:
-        #    name: "create-activation-file"
+        - unity/create-activation-file:
+            name: "create-activation-file"
         - download-skp-file
-        #- wrapup
-        #- unity/build:
-        #    name: "Build Asset Bundles"
-        #    build-target: StandaloneLinux64
-        #    build-method: CustomUnityCli.BuildAssetBundles
-        #    custom-parameters: $SKP_FILE_NAME
-        #    compress: false
-        #    context: cpe-unity
-        #    project-path: .
-        #    executor:
-        #      name: unity/ubuntu
-        #      target_platform: "linux-il2cpp"
-        #      editor_version: 2021.3.1f1
-        #      resource_class: medium
-        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
-        #    unity-password-var-name: UNITY_PASSWORD 
-        #    unity-username-var-name: UNITY_USERNAME
+        - unity/build:
+            name: "Build Asset Bundles"
+            build-target: StandaloneLinux64
+            build-method: CustomUnityCli.BuildAssetBundles
+            custom-parameters: $FILE_NAME
+            compress: false
+            context: cpe-unity
+            project-path: .
+            executor:
+              name: unity/ubuntu
+              target_platform: "linux-il2cpp"
+              editor_version: 2021.3.1f1
+              resource_class: medium
+            unity-license-var-name: UNITY_ENCODED_LICENSE 
+            unity-password-var-name: UNITY_PASSWORD 
+            unity-username-var-name: UNITY_USERNAME
