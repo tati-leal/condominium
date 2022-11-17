@@ -9,7 +9,7 @@ public class CustomUnityCli : MonoBehaviour
     static void BuildAssetBundles()
     {
 
-        string arg = GetArg("-executeMethod");
+        string arg = System.IO.Path.GetFileNameWithoutExtension(GetArg("-executeMethod"));
         Debug.Log(arg);
         //Find prefab name and get its GUID
         string guid = AssetDatabase.FindAssets(arg, null)[0];
@@ -34,9 +34,9 @@ public class CustomUnityCli : MonoBehaviour
         var args = System.Environment.GetCommandLineArgs();
         for (int i = 0; i < args.Length; i++)
         {
-            if (args[i] == name && args.Length > i + 4)
+            if (args[i] == name && args.Length > i + 2)
             {
-                return args[i + 4];
+                return args[i + 2];
             }
         }
         return null;
