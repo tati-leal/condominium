@@ -17,7 +17,7 @@ jobs:
     docker:
       - image: cimg/base:stable
     steps:
-      #- checkout
+      - checkout
       #- run:
       #    name: "Download skp file"
       #    command: |
@@ -71,10 +71,11 @@ workflows:
         - unity/build:
             name: "Build Asset Bundles"
             build-target: StandaloneLinux64
-            build-method: CustomUnityCli.BuildAssetBundles GE23_test.skp
-            #custom-parameters: GE23_test.skp
+            build-method: CustomUnityCli.BuildAssetBundles
+            custom-parameters: GE23_test.skp
             compress: false
             context: cpe-unity
+            project-path: ~/project/condominium
             executor:
               name: unity/ubuntu
               target_platform: "linux-il2cpp"
