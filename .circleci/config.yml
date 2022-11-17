@@ -47,12 +47,12 @@ workflows:
             name: "create-activation-file"
         - teeeest:
             context:
-              - condominium
+              - Condominium
             requires:
               - download-skp-file
         - download-skp-file:
             context:
-              - condominium
+              - Condominium
 
         #- unity/build:
         #    name: "Build Asset Bundles"
