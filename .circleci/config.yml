@@ -27,9 +27,9 @@ jobs:
       #      curl -o "/tmp/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - store_artifacts:
           path: /tmp
-      #- run:
-      #    name: Install XVFB
-      #    command: sudo apt-get install xvfb
+      - run:
+          name: Install XVFB
+          command: sudo apt-get install xvfb
       #- run:
       #    name: Install unity-hub
       #    command: brew install --cask unity-hub
