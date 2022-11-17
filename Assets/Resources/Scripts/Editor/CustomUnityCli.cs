@@ -34,9 +34,9 @@ public class CustomUnityCli : MonoBehaviour
         var args = System.Environment.GetCommandLineArgs();
         for (int i = 0; i < args.Length; i++)
         {
-            if (args[i] == name && args.Length > i + 2)
+            if (args[i] == name && args.Length > i + 4)
             {
-                return args[i + 2];
+                return args[i + 4];
             }
         }
         return null;
