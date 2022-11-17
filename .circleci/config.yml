@@ -18,6 +18,9 @@ jobs:
       - image: cimg/base:stable
     steps:
       - checkout
+      - run:
+          name: Dirs
+          command: ls
       #- run:
       #    name: "Download skp file"
       #    command: |
@@ -75,7 +78,7 @@ workflows:
             custom-parameters: GE23_test.skp
             compress: false
             context: cpe-unity
-            project-path: ~/condominium
+            project-path: .
             executor:
               name: unity/ubuntu
               target_platform: "linux-il2cpp"
