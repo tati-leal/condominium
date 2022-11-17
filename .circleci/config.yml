@@ -27,12 +27,17 @@ jobs:
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
           #  curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      - unity/build:
-            build-target: StandaloneLinux64
-            build-method: CustomUnityCli.BuildAssetBundles
-            custom-parameters: $FILE_NAME
-            compress: false
-            project-path: .
+  
+  teeeest:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - store_artifacts:
+          path: /tmp
+      - run:
+          name: "Teeest"
+          command: echo $FILE_NAME
+
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -41,6 +46,7 @@ workflows:
         - unity/create-activation-file:
             name: "create-activation-file"
         - download-skp-file
+        - teeeest
         #- unity/build:
         #    name: "Build Asset Bundles"
         #    build-target: StandaloneLinux64
