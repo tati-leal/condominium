@@ -23,9 +23,7 @@ jobs:
             export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            ls -d ./Assets/Resources/Models/Buildings/*
-            ls -d ./Assets/StreamingAssets/*
+      #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - store_artifacts:
           path: /tmp
       #- run:
@@ -76,23 +74,23 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        - unity/create-activation-file:
-            name: "create-activation-file"
+        #- unity/create-activation-file:
+        #    name: "create-activation-file"
         - download-skp-file
-        - wrapup
-        - unity/build:
-            name: "Build Asset Bundles"
-            build-target: StandaloneLinux64
-            build-method: CustomUnityCli.BuildAssetBundles
-            custom-parameters: $SKP_FILE_NAME
-            compress: false
-            context: cpe-unity
-            project-path: .
-            executor:
-              name: unity/ubuntu
-              target_platform: "linux-il2cpp"
-              editor_version: 2021.3.1f1
-              resource_class: medium
-            unity-license-var-name: UNITY_ENCODED_LICENSE 
-            unity-password-var-name: UNITY_PASSWORD 
-            unity-username-var-name: UNITY_USERNAME
+        #- wrapup
+        #- unity/build:
+        #    name: "Build Asset Bundles"
+        #    build-target: StandaloneLinux64
+        #    build-method: CustomUnityCli.BuildAssetBundles
+        #    custom-parameters: $SKP_FILE_NAME
+        #    compress: false
+        #    context: cpe-unity
+        #    project-path: .
+        #    executor:
+        #      name: unity/ubuntu
+        #      target_platform: "linux-il2cpp"
+        #      editor_version: 2021.3.1f1
+        #      resource_class: medium
+        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
+        #    unity-password-var-name: UNITY_PASSWORD 
+        #    unity-username-var-name: UNITY_USERNAME
