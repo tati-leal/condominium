@@ -20,13 +20,12 @@ jobs:
       - run:
           name: "Download skp file"
           command: |
-            $SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
+            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             ls -d ./Assets/Resources/Models/Buildings/*
             ls -d ./Assets/StreamingAssets/*
-            echo $SKP_FILE_NAME
       - store_artifacts:
           path: /tmp
       #- run:
@@ -62,8 +61,14 @@ jobs:
       - run:
           name: "Save Asset Bundle artifact"
           command: "echo Save Asset Bundle artifact"
-
-
+  wrapup:
+    docker:
+      - image: cimg/base:stable
+    steps:
+      - run:
+          name: "Retrieve environment variable"
+          command: echo $SKP_FILE_NAME
+          
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
@@ -71,8 +76,8 @@ workflows:
       jobs:
         - unity/create-activation-file:
             name: "create-activation-file"
-            
         - build-asset-bundles
+        - wrapup
         - unity/build:
             name: "Build Asset Bundles"
             build-target: StandaloneLinux64
@@ -88,4 +93,4 @@ workflows:
               resource_class: medium
             unity-license-var-name: UNITY_ENCODED_LICENSE 
             unity-password-var-name: UNITY_PASSWORD 
-            unity-username-var-name: UNITY_USERNAME 
+            unity-username-var-name: UNITY_USERNAME
