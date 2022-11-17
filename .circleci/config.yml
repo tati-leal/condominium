@@ -23,7 +23,7 @@ jobs:
             export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            echo "export dbPasswordDev=$SKP_FILE_NAME" >> $BASH_ENV
+            echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
       #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - store_artifacts:
           path: /tmp
@@ -52,7 +52,7 @@ jobs:
           name: "Upload Asset Bundles"
           command: |
             echo $BASH_ENV
-            printenv dbPasswordDev
+            printenv FILE_NAME
       - run:
           name: "Delete skp file"
           command: "echo Delete skp file"
