@@ -15,6 +15,7 @@ workflows:
         #    name: "create-activation-file"
         - unity/build:
             pre-steps:
+              - checkout
               - run:
                   name: "Download skp file"
                   command: |
