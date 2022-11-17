@@ -9,7 +9,7 @@ orbs:
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  build-asset-bundles:
+  download-skp-file:
     #executor: win/default
     #macos:
     #  xcode: 14.1.0
@@ -20,13 +20,13 @@ jobs:
       - run:
           name: "Download skp file"
           command: |
-            echo "export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')" >> $BASH_ENV
+            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             ls -d ./Assets/Resources/Models/Buildings/*
             ls -d ./Assets/StreamingAssets/*
-            printenv SKP_FILE_NAME
+            echo "${SKP_FILE_NAME}" >> $BASH_ENV
       - store_artifacts:
           path: /tmp
       #- run:
@@ -52,7 +52,7 @@ jobs:
       #      /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -batchmode -projectPath /Users/distiller/project/. -executeMethod CustomUnityCli.BuildAssetBundles FILE_NAME.skp -quit -logFile /dev/stdout
       - run:
           name: "Upload Asset Bundles"
-          command: "echo Upload Asset Bundles"
+          command: printenv SKP_FILE_NAME
       - run:
           name: "Delete skp file"
           command: "echo Delete skp file"
@@ -77,7 +77,7 @@ workflows:
       jobs:
         - unity/create-activation-file:
             name: "create-activation-file"
-        - build-asset-bundles
+        - download-skp-file
         - wrapup
         - unity/build:
             name: "Build Asset Bundles"
