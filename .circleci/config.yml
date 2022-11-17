@@ -75,7 +75,7 @@ workflows:
             custom-parameters: GE23_test.skp
             compress: false
             context: cpe-unity
-            project-path: ~/project/condominium
+            project-path: ~/condominium
             executor:
               name: unity/ubuntu
               target_platform: "linux-il2cpp"
