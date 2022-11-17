@@ -44,8 +44,8 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        - unity/create-activation-file:
-            name: "create-activation-file"
+        #- unity/create-activation-file:
+        #    name: "create-activation-file"
         
         - teeeest:
             context:
@@ -59,7 +59,7 @@ workflows:
 
         - unity/build:
             name: "Build Asset Bundles"
-            build-target: StandaloneLinux64
+            build-target: iOS
             build-method: CustomUnityCli.BuildAssetBundles
             custom-parameters: $FILE_NAME
             compress: false
