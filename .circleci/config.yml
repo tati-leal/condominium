@@ -46,28 +46,30 @@ workflows:
       jobs:
         - unity/create-activation-file:
             name: "create-activation-file"
+        
         - teeeest:
             context:
               - Condominium
             requires:
               - download-skp-file
+        
         - download-skp-file:
             context:
               - Condominium
 
-        #- unity/build:
-        #    name: "Build Asset Bundles"
-        #    build-target: StandaloneLinux64
-        #    build-method: CustomUnityCli.BuildAssetBundles
-        #    custom-parameters: $FILE_NAME
-        #    compress: false
-        #    context: cpe-unity
-        #    project-path: .
-        #    executor:
-        #      name: unity/ubuntu
-        #      target_platform: "linux-il2cpp"
-        #      editor_version: 2021.3.1f1
-        #      resource_class: medium
-        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
-        #    unity-password-var-name: UNITY_PASSWORD 
-        #    unity-username-var-name: UNITY_USERNAME
+        - unity/build:
+            name: "Build Asset Bundles"
+            build-target: StandaloneLinux64
+            build-method: CustomUnityCli.BuildAssetBundles
+            custom-parameters: $FILE_NAME
+            compress: false
+            context: cpe-unity
+            project-path: .
+            executor:
+              name: unity/ubuntu
+              target_platform: "linux-il2cpp"
+              editor_version: 2021.3.1f1
+              resource_class: medium
+            unity-license-var-name: UNITY_ENCODED_LICENSE 
+            unity-password-var-name: UNITY_PASSWORD 
+            unity-username-var-name: UNITY_USERNAME
