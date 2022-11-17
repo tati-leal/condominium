@@ -20,7 +20,7 @@ jobs:
       - checkout
       - run:
           name: Dirs
-          command: ls
+          command: ls && cd .. && ls && cd .. && ls
       #- run:
       #    name: "Download skp file"
       #    command: |
