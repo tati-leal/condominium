@@ -38,6 +38,9 @@ jobs:
       - run:
           name: "Teeest"
           command: printenv FILE_NAME
+      - run:
+          name: "Teeest"
+          command: echo $FILE_NAME
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -57,19 +60,19 @@ workflows:
             context:
               - Condominium
 
-        - unity/build:
-            name: "Build Asset Bundles"
-            build-target: iOS
-            build-method: CustomUnityCli.BuildAssetBundles
-            custom-parameters: $FILE_NAME
-            compress: false
-            context: cpe-unity
-            project-path: .
-            executor:
-              name: unity/ubuntu
-              target_platform: "linux-il2cpp"
-              editor_version: 2021.3.1f1
-              resource_class: medium
-            unity-license-var-name: UNITY_ENCODED_LICENSE 
-            unity-password-var-name: UNITY_PASSWORD 
-            unity-username-var-name: UNITY_USERNAME
+        #- unity/build:
+        #    name: "Build Asset Bundles"
+        #    build-target: iOS
+        #    build-method: CustomUnityCli.BuildAssetBundles
+        #    custom-parameters: $FILE_NAME
+        #    compress: false
+        #    context: cpe-unity
+        #    project-path: .
+        #    executor:
+        #      name: unity/ubuntu
+        #      target_platform: "linux-il2cpp"
+        #      editor_version: 2021.3.1f1
+        #      resource_class: medium
+        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
+        #    unity-password-var-name: UNITY_PASSWORD 
+        #    unity-username-var-name: UNITY_USERNAME
