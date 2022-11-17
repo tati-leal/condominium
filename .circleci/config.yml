@@ -29,7 +29,7 @@ workflows:
                   name: "Dir"
                   command: ls
             name: "Build Asset Bundles"
-            build-target: iOS
+            build-target: iOSSupport
             build-method: CustomUnityCli.BuildAssetBundles
             custom-parameters: $FILE_NAME
             compress: false
