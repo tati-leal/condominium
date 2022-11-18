@@ -11,8 +11,8 @@ orbs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        #- unity/create-activation-file:
-        #    name: "create-activation-file"
+        - unity/create-activation-file:
+            name: "create-activation-file"
         - unity/build:
             pre-steps:
               #- checkout
