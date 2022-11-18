@@ -26,7 +26,7 @@ workflows:
               #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
               - run:
                   name: "aaaa"
-                  command: xvfb-run --auto-servernum '--server-args=-screen 0 640x480x24' unity-editor -projectPath /root/project/. -quit -batchmode -nographics -buildTarget iOS -customBuildTarget iOS -customBuildName iOS -customBuildPath /root/project/./Builds/iOS/ -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
+                  command: xvfb-run --auto-servernum '--server-args=-screen 0 640x480x24' unity-editor -projectPath /root/project/. -quit -batchmode -nographics -buildTarget iOS -customBuildTarget iOS -customBuildName iOS -customBuildPath /root/project/./Builds/iOS/ -username $UNITY_USERNAME -password $UNITY_PASSWORD -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
             post-steps:
               - run:
                   name: "Dir"
