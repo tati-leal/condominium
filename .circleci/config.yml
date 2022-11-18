@@ -36,8 +36,7 @@ workflows:
             context: cpe-unity
             project-path: .
             executor:
-              name: unity/ubuntu
-              target_platform: "ios"
+              name: 'unity/macos-runner'
               editor_version: 2021.3.1f1
               resource_class: large
             unity-license-var-name: UNITY_ENCODED_LICENSE 
