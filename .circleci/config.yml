@@ -15,6 +15,8 @@ jobs:
       - run:
           name: "dirs"
           command: |
+            ls
+            echo ""
             ls Assets/StreamingAssets
       - run:
           name: "Download skp file"
@@ -25,12 +27,19 @@ jobs:
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - run:
+          name: "dirs"
+          command: |
+            ls
+            echo ""
+            ls Assets/StreamingAssets
+      - run:
           name: "Build Asset Bundles"
           command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
       - run:
           name: "dirs"
           command: |
             ls
+            echo ""
             ls Assets/StreamingAssets
 
 
