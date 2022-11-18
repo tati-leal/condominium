@@ -13,6 +13,10 @@ jobs:
       - checkout
       - unity/prepare-env
       - run:
+          name: "dirs"
+          command: |
+            ls Assets/StreamingAssets
+      - run:
           name: "Download skp file"
           command: |
             export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
@@ -23,6 +27,11 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
+      - run:
+          name: "dirs"
+          command: |
+            ls
+            ls Assets/StreamingAssets
 
 
 # Invoke jobs via workflows
