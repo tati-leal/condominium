@@ -38,8 +38,9 @@ workflows:
             executor:
               name: 'unity/ubuntu'
               editor_version: 2021.3.1f1
-              resource_class: large
+              resource_class: medium
               target_platform: "ios"
             unity-license-var-name: UNITY_ENCODED_LICENSE 
             unity-password-var-name: UNITY_PASSWORD 
             unity-username-var-name: UNITY_USERNAME
+            no_output_timeout: 120m
