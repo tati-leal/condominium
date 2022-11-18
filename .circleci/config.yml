@@ -11,8 +11,8 @@ jobs:
     docker:
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
-      - unity/prepare-env
       - checkout
+      - unity/prepare-env
       - run:
           name: "Download skp file"
           command: |
@@ -23,7 +23,7 @@ jobs:
       #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
       - run:
           name: "aaaa"
-          command: unity-editor -projectPath /root/project/. -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
+          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
 
 
 # Invoke jobs via workflows
