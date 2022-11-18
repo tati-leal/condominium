@@ -6,69 +6,41 @@ orbs:
   unity: game-ci/unity@1.3.0
   #win: circleci/windows@4.1.1
 
-jobs:
-  unity:
-    #machine:
-    #  image: ubuntu-2004:202010-01
-    machine: true
-    resource_class: kaapiel/macbookpro
-    steps:
-      - unity/prepare-env
-      #- checkout
-      - run:
-          name: "Download skp file"
-          command: |
-            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
-            export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
-            echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-            echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-          #  curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      - unity/build:
-          #name: "Build Asset Bundles"
-          build-target: iOS
-          #unity-license-var-name: UNITY_ENCODED_LICENSE 
-          #unity-password-var-name: UNITY_PASSWORD 
-          #unity-username-var-name: UNITY_USERNAME
-          project-path: .
-          build-method: CustomUnityCli.BuildAssetBundles
-          custom-parameters: $FILE_NAME
-
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        - unity
         #- unity/create-activation-file:
         #    name: "create-activation-file"
-        #- unity/build:
-        #    pre-steps:
-        #      - checkout
-        #      - run:
-        #          name: "Download skp file"
-        #          command: |
-        #            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
-        #            export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
-        #            echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-        #           echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-        #            curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-        #    post-steps:
-        #      - run:
-        #          name: "Dir"
-        #          command: ls
-        #    name: "Build Asset Bundles"
-        #    build-target: iOS
-        #    build-method: CustomUnityCli.BuildAssetBundles
-        #    custom-parameters: $FILE_NAME
-        #    compress: false
-        #    context: cpe-unity
-        #    project-path: .
-        #    executor:
-        #      name: 'unity/ubuntu'
-        #      editor_version: 2021.3.1f1
-        #      resource_class: large
-        #      target_platform: "ios"
-        #    unity-license-var-name: UNITY_ENCODED_LICENSE 
-        #    unity-password-var-name: UNITY_PASSWORD 
-        #    unity-username-var-name: UNITY_USERNAME
-        #    no_output_timeout: 120m
+        - unity/build:
+            pre-steps:
+              #- checkout
+              - run:
+                  name: "Download skp file"
+                  command: |
+                    export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
+                    export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
+                    echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+                    echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
+              #      curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+            post-steps:
+              - run:
+                  name: "Dir"
+                  command: ls
+            name: "Build Asset Bundles"
+            build-target: iOS
+            build-method: CustomUnityCli.BuildAssetBundles
+            custom-parameters: $FILE_NAME
+            compress: false
+            context: cpe-unity
+            project-path: .
+            executor:
+              name: 'unity/ubuntu'
+              editor_version: 2021.3.1f1
+              resource_class: large
+              target_platform: "ios"
+            unity-license-var-name: UNITY_ENCODED_LICENSE 
+            unity-password-var-name: UNITY_PASSWORD 
+            unity-username-var-name: UNITY_USERNAME
+            no_output_timeout: 120m
