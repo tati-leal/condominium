@@ -9,7 +9,7 @@ orbs:
 jobs:
   run-command:
     docker:
-      - image: unity/ubuntu
+      - image: unity-ci/editor
     steps:
       - unity/prepare-env
       - run:
