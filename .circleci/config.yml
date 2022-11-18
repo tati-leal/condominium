@@ -8,9 +8,10 @@ orbs:
 
 jobs:
   unity:
-    machine:
-      image: ubuntu-2004:202010-01
-    #resource_class: kaapiel/macbookpro
+    #machine:
+    #  image: ubuntu-2004:202010-01
+    machine: true
+    resource_class: kaapiel/macbookpro
     steps:
       - unity/prepare-env
       #- checkout
