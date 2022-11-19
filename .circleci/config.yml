@@ -23,7 +23,7 @@ jobs:
             echo ""
             ls ./Assets/Resources/Models/Buildings
       - store_artifacts:
-          path: ./Assets/Resources/Models/Buildings
+          path: ./Assets/Resources/Models/Buildings/
       - run:
           name: "Build Asset Bundles"
           command: |
