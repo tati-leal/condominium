@@ -11,15 +11,11 @@ jobs:
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
       - store_artifacts:
-          path: Assets/StreamingAssets
+          path: ./Assets/StreamingAssets
+      - store_artifacts:
+          path: ./Assets/Resources/Models/Buildings
       - checkout
       - unity/prepare-env
-      - run:
-          name: "dirs"
-          command: |
-            ls
-            echo ""
-            ls Assets/StreamingAssets
       - run:
           name: "Download skp file"
           command: |
@@ -28,21 +24,14 @@ jobs:
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      - run:
-          name: "dirs"
-          command: |
-            ls
             echo ""
-            ls Assets/StreamingAssets
+            ls ./Assets/Resources/Models/Buildings
       - run:
           name: "Build Asset Bundles"
-          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
-      - run:
-          name: "dirs"
           command: |
-            ls
+            unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
             echo ""
-            ls Assets/StreamingAssets
+            ls ./Assets/StreamingAssets
 
 
 # Invoke jobs via workflows
