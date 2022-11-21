@@ -11,12 +11,13 @@ jobs:
       xcode: "14.1.0"
     resource_class: medium
     steps:
-      - checkout
+      #- checkout
       #- unity/prepare-env
       - run:
           name: "Install Unity Hub"
           command: |
-            mkdir /Library/Application Support/Unity
+            chmod 755 '/Library/Application Support'
+            mkdir '/Library/Application Support/Unity'
             brew update --auto-update
             brew install --cask unity-hub
       - run:
