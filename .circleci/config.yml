@@ -19,7 +19,7 @@ jobs:
             brew update --auto-update
             brew install --cask unity-hub
             '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset '3b70a0754835' --module ios --childModules
-            echo ""
+            echo "Unity Installed"
       - run:
           name: "Download skp file"
           command: |
@@ -30,16 +30,16 @@ jobs:
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo ""
             ls ./Assets/Resources/Models/Buildings
-      - store_artifacts:
-          path: ./Assets/Resources/Models/Buildings/
+      #- store_artifacts:
+      #    path: ./Assets/Resources/Models/Buildings/
       - run:
           name: "Build Asset Bundles"
           command: |
             /Applications/Unity/Hub/Editor//Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
             echo ""
             ls ./Assets/StreamingAssets
-      - store_artifacts:
-          path: ./Assets/StreamingAssets
+      #- store_artifacts:
+      #    path: ./Assets/StreamingAssets
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
