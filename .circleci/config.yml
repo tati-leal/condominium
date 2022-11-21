@@ -18,8 +18,7 @@ jobs:
           command: |
             brew update --auto-update
             brew install --cask unity-hub
-            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset '3b70a0754835' --module ios --childModules
-            echo "Unity Installed"
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset 3b70a0754835 --module ios --childModules && echo "Unity Installed"
       - run:
           name: "Download skp file"
           command: |
