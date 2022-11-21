@@ -24,9 +24,9 @@ jobs:
             ls ./Assets/
       - run:
           name: "Import Asset"
-          command: unity-editor -batchmode -quit -projectPath . -executeMethod AssetImporter.Import -path "Assets\$SKP_FILE_NAME"
+          command: unity-editor -batchmode -quit -projectPath . -executeMethod AssetImporter.Import -path "Assets/$FILE_NAME"
       - store_artifacts:
-          path: ./Assets/Resources/Models/Buildings/$SKP_FILE_NAME
+          path: ./Assets/Resources/Models/Buildings/$FILE_NAME
       - run:
           name: "Build Asset Bundles"
           command: |
