@@ -24,7 +24,7 @@ jobs:
             ls ./Assets/
       - run:
           name: "Import Asset"
-          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod AssetImporter.Import "Assets\$FILE_NAME" -logFile /dev/stdout
+          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod AssetImporter.Import "Assets\\$FILE_NAME" -logFile /dev/stdout
       - store_artifacts:
           path: ./Assets/Resources/Models/Buildings/$FILE_NAME
       - run:
