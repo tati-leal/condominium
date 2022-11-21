@@ -25,7 +25,7 @@ public class CustomUnityCli : MonoBehaviour
         //building.transform.localPosition = new Vector3(0, 0, 0);
 
         //Set bundle name into prefab
-        AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, "");
+        UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, "");
 
         //Build iOS asset bundles
         BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);

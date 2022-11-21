@@ -46,7 +46,7 @@ namespace UnityStandardAssets.ImageEffects
                 else if (GUILayout.Button ("Convert and Apply"))
                 {
                     string path = AssetDatabase.GetAssetPath (tex);
-                    TextureImporter textureImporter = AssetImporter.GetAtPath(path) as TextureImporter;
+                    TextureImporter textureImporter = UnityEditor.AssetImporter.GetAtPath(path) as TextureImporter;
                     bool doImport = textureImporter.isReadable == false;
                     if (textureImporter.mipmapEnabled == true) {
                         doImport = true;
