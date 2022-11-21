@@ -5,7 +5,10 @@ using UnityEditor;
 
 public class CustomUnityCli : MonoBehaviour
 {
-
+    /// <summary>
+    /// Used to build asset bundle via command line invocation of Unity, like so:
+    /// C:\Program Files\Unity\Hub\Editor\2019.4.5f1\Editor\Unity.exe -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial $SERIAL_NUMBER -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
+    /// </summary>
     static void BuildAssetBundles()
     {
 
