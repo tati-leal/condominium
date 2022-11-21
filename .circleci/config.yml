@@ -12,7 +12,14 @@ jobs:
     resource_class: medium
     steps:
       - checkout
-      - unity/prepare-env
+      #- unity/prepare-env
+      - run:
+          name: "Prepare env manual"
+          command: |
+            brew update --auto-update
+            brew install --cask unity-hub
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset '' --module mac-il2cpp --childModules
+            /Applications/Unity/Hub/Editor//Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
       - run:
           name: "Download skp file"
           command: |
