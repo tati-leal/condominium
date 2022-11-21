@@ -7,25 +7,11 @@ orbs:
 
 jobs:
   run-command:
-    macos:
-      xcode: "14.1.0"
-    resource_class: medium
+    docker:
+      - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
       - checkout
       - unity/prepare-env
-      - run:
-          name: "Install Unity Hub"
-          command: |
-            sudo chown -R $(whoami) '/Library/Application Support'
-            sudo chmod -R +rwX '/Library/Application Support'
-            mkdir '/Library/Application Support/Unity'
-            brew update --auto-update
-            brew install --cask unity-hub
-      - run:
-          name: "Install Unity Editor"
-          command: |
-            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset 3b70a0754835 --module ios --childModules && echo "Unity Installed"
-            echo "Unity v2021.3.1f1 Installed"
       - run:
           name: "Download skp file"
           command: |
@@ -36,16 +22,16 @@ jobs:
             curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo ""
             ls ./Assets/Resources/Models/Buildings
-      #- store_artifacts:
-      #    path: ./Assets/Resources/Models/Buildings/
+      - store_artifacts:
+          path: ./Assets/Resources/Models/Buildings
       - run:
           name: "Build Asset Bundles"
           command: |
-            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
+            unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
             echo ""
             ls ./Assets/StreamingAssets
-      #- store_artifacts:
-      #    path: ./Assets/StreamingAssets
+      - store_artifacts:
+          path: ./Assets/StreamingAssets
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
