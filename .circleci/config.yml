@@ -16,6 +16,7 @@ jobs:
       - run:
           name: "Install Unity Hub"
           command: |
+            mkdir /Library/Application Support/Unity
             brew update --auto-update
             brew install --cask unity-hub
       - run:
