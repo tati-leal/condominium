@@ -28,7 +28,7 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout RIVIERA_test.skp
+            /Applications/Unity/Hub/Editor//Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
             echo ""
             ls ./Assets/StreamingAssets
       - store_artifacts:
