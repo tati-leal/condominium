@@ -7,8 +7,9 @@ orbs:
 
 jobs:
   run-command:
-    docker:
-      - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
+    macos:
+      xcode: "12.5.1"
+    resource_class: large
     steps:
       - checkout
       - unity/prepare-env
