@@ -38,7 +38,7 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            /Applications/Unity/Hub/Editor//Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
+            /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout $SKP_FILE_NAME
             echo ""
             ls ./Assets/StreamingAssets
       #- store_artifacts:
