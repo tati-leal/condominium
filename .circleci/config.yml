@@ -19,11 +19,14 @@ jobs:
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-            curl -o "./Assets/Resources/Models/Buildings/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+            curl -o "./Assets/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo ""
-            ls ./Assets/Resources/Models/Buildings
+            ls ./Assets/
+      - run:
+          name: "Import Asset"
+          command: unity-editor -batchmode -quit -projectPath . -executeMethod AssetImporter.Import -path "Assets\$SKP_FILE_NAME"
       - store_artifacts:
-          path: ./Assets/Resources/Models/Buildings
+          path: ./Assets/Resources/Models/Buildings/$SKP_FILE_NAME
       - run:
           name: "Build Asset Bundles"
           command: |
