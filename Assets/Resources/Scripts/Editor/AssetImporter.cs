@@ -11,10 +11,11 @@ public class AssetImporter : MonoBehaviour
 
     /// <summary>
     /// Used to import an asset via command line invocation of Unity, like so:
-    /// C:\Program Files\Unity\Hub\Editor\2019.4.5f1\Editor\Unity.exe -batchmode -quit -projPath "C:\UnityTestProject" -executeMethod AssetImporter.Import -path "Assets\TestFile.txt"
+    /// C:\Program Files\Unity\Hub\Editor\2019.4.5f1\Editor\Unity.exe  -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial $SERIAL_NUMBER -executeMethod AssetImporter.Import -path "$FILE_PATH" -logFile /dev/stdout
     /// </summary>
     public static void Import()
     {
+        Debug.Log("Method AssetImporter.Import called...");
         var args = System.Environment.GetCommandLineArgs();
 
         if (args != null)
@@ -25,6 +26,7 @@ public class AssetImporter : MonoBehaviour
                 {
                     case ARG_ASSET_PATH:
                         {
+                            Debug.Log("Method AssetImporter.Import has -path");
                             if (++i < args.Length)
                             {
                                 var assetPath = args[i];
