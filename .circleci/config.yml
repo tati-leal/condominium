@@ -16,7 +16,7 @@ jobs:
       - run:
           name: "Install Unity Hub"
           command: |
-            chmod 755 '/Library/Application Support'
+            chmod 755 '/Library/Application Support/Unity'
             mkdir '/Library/Application Support/Unity'
             brew update --auto-update
             brew install --cask unity-hub
