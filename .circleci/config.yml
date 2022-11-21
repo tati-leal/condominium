@@ -23,6 +23,27 @@ jobs:
           command: |
             '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.1f1' --changeset 3b70a0754835 --module ios --childModules && echo "Unity Installed"
             echo "Unity v2021.3.1f1 Installed"
+            ls /Applications/
+            echo ""
+            ls /Applications/Unity/
+            echo ""
+            ls /Applications/Unity/Hub/
+            echo ""
+            ls /Applications/Unity/Hub/Editor/
+            echo ""
+            ls /Applications/Unity/Hub/Editor/2021.3.1f1/
+            echo ""
+            ls /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/
+            echo ""
+            ls /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/
+            echo ""
+            ls /Applications/Unity/Hub/Editor/2021.3.1f1/Unity.app/Contents/MacOS/Unity
+            echo ""
+            ls /Library/
+            echo ""
+            ls '/Library/Application Support/'
+            echo ""
+            ls '/Library/Application Support/Unity'
       - run:
           name: "Download skp file"
           command: |
