@@ -15,11 +15,13 @@ jobs:
       - run:
           name: "mkdir"
           command: |
+            ls
+            cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r Assets
             ls
-            mkdir /Assets/Scripts/Editor
+            mkdir -p Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
-            mkdir /Assets/StreamingAssets
+            mkdir -p Assets/StreamingAssets
             ls
       - run:
           name: "Download skp file"
