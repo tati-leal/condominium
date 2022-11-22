@@ -34,9 +34,17 @@ public class CustomUnityCli : MonoBehaviour
         AssetDatabase.ImportAsset(asset_path);
         Debug.Log("External file import finished!");
 
+        Debug.Log("Saving asset and reimporting");
+        UnityEditor.AssetImporter.GetAtPath(asset_path).SaveAndReimport();
+        Debug.Log("Saving asset and reimporting done!");
+
+        Debug.Log("Saving asset and reimporting");
+        UnityEditor.AssetImporter.GetAtPath(asset_path).SaveAndReimport();
+        Debug.Log("Saving asset and reimporting done!");
+
         //Set bundle name into prefab
         Debug.Log("Set asset bundle name and variant of " + arg);
-        UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, "");
+        UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, arg);
         Debug.Log("Asset bundle name and variant set!");
 
         //Build iOS asset bundles
