@@ -10,13 +10,12 @@ jobs:
     docker:
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
-      #- checkout
+      - checkout
       - unity/prepare-env
       - run:
-          name: "mkdirs"
+          name: "ls"
           command: |
-            mkdir /Assets
-            mkdir /Assets/StreamingAssets
+            ls
       - run:
           name: "Download skp file"
           command: |
@@ -24,7 +23,6 @@ jobs:
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-            curl -o "./Assets/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
             echo ""
             ls ./Assets/
       - run:
