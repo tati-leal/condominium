@@ -17,15 +17,15 @@ jobs:
           command: |
             ls
             echo ""
-            ls /Assets/
+            ls Assets/
             echo ""
-            ls /Assets/Resources/
+            ls Assets/Resources/
             echo ""
-            ls /Assets/Resources/Scripts/
+            ls Assets/Resources/Scripts/
             echo ""
-            ls /Assets/Resources/Scripts/Editor/
+            ls Assets/Resources/Scripts/Editor/
             echo ""
-            cp /Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
+            cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r /Assets
             mkdir /Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
