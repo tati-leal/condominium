@@ -16,9 +16,10 @@ jobs:
           name: "mkdir"
           command: |
             rm -r Assets
-            mkdir Assets/Scripts/Editor
+            ls
+            mkdir /Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
-            mkdir Assets/StreamingAssets
+            mkdir /Assets/StreamingAssets
             ls
       - run:
           name: "Download skp file"
