@@ -13,22 +13,36 @@ public class CustomUnityCli : MonoBehaviour
     {
 
         string arg = System.IO.Path.GetFileNameWithoutExtension(GetArg("-executeMethod"));
-        Debug.Log(arg);
+        Debug.Log("External file found: " + arg);
+
         //Find prefab name and get its GUID
+        Debug.Log("Finding GUID from asset name: " + arg);
         string guid = AssetDatabase.FindAssets(arg, null)[0];
+        Debug.Log("Asset GUID found: " + guid);
 
         //Retrieve file path from GUID
+        Debug.Log("Retrieving asset path from asset GUID");
         string asset_path = AssetDatabase.GUIDToAssetPath(guid);
+        Debug.Log("Asset path retrieved: " + asset_path);
 
         //Define its coordinates
         //GameObject building = AssetDatabase.LoadAssetAtPath(asset_path, typeof(GameObject)) as GameObject;
         //building.transform.localPosition = new Vector3(0, 0, 0);
 
+        //Import asset into project
+        Debug.Log("External file import started...");
+        AssetDatabase.ImportAsset(asset_path);
+        Debug.Log("External file import finished!");
+
         //Set bundle name into prefab
+        Debug.Log("Set asset bundle name and variant of " + arg);
         UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, "");
+        Debug.Log("Asset bundle name and variant set!");
 
         //Build iOS asset bundles
+        Debug.Log("Building iOS asset bundle: " + arg);
         BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
+        Debug.Log("iOS asset bundle built: " + arg);
     }
 
     // Helper function for getting the command line arguments
