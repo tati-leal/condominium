@@ -8,9 +8,12 @@ orbs:
 jobs:
   run-command:
     docker:
-      #- image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
+      #- image: unityci/editor:ubuntu-2022.1.23f1-ios-1.0.1
     steps:
+      - run:
+          name: "Return license"
+          command: unity-editor -quit -batchmode -returnlicense -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -logFile /dev/stdout
       - checkout
       - unity/prepare-env
       - run:
@@ -42,6 +45,6 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        - unity/create-activation-file:
-            editor_version: '2021.3.1f1'
+        #- unity/create-activation-file:
+        #    editor_version: '2021.3.1f1'
         - run-command
