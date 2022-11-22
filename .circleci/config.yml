@@ -9,7 +9,11 @@ jobs:
   run-command:
     docker:
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
+      #- image: unityci/editor:ubuntu-2022.1.23f1-ios-1.0.1
     steps:
+      #- run:
+      #    name: "Return license"
+      #    command: unity-editor -quit -batchmode -returnlicense -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -logFile /dev/stdout
       - checkout
       - unity/prepare-env
       - run:
@@ -24,7 +28,7 @@ jobs:
             ls ./Assets/
       - run:
           name: "Import Asset"
-          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod AssetImporter.Import "Assets\\$FILE_NAME" -logFile /dev/stdout
+          command: unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -executeMethod AssetImporter.Import -path "Assets/$FILE_NAME" -logFile /dev/stdout
       - store_artifacts:
           path: ./Assets/Resources/Models/Buildings/$FILE_NAME
       - run:
@@ -41,5 +45,6 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
-        #- unity/create-activation-file
+        #- unity/create-activation-file:
+        #    editor_version: '2021.3.1f1'
         - run-command
