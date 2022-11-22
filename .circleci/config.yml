@@ -20,6 +20,7 @@ jobs:
             mkdir /Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
             mkdir /Assets/StreamingAssets
+            ls
       - run:
           name: "Download skp file"
           command: |
