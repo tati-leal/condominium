@@ -10,13 +10,16 @@ jobs:
     docker:
       - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
-      #- checkout
+      - checkout
       - unity/prepare-env
       - run:
-          name: "mkdirs"
+          name: "mkdir"
           command: |
-            mkdir /Assets
-            mkdir /Assets/StreamingAssets
+            cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
+            rm -r Assets
+            mkdir -p Assets/Scripts/Editor
+            cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
+            mkdir -p Assets/StreamingAssets
       - run:
           name: "Download skp file"
           command: |
