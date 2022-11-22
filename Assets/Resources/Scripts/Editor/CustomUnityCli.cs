@@ -38,10 +38,6 @@ public class CustomUnityCli : MonoBehaviour
         UnityEditor.AssetImporter.GetAtPath(asset_path).SaveAndReimport();
         Debug.Log("Saving asset and reimporting done!");
 
-        Debug.Log("Saving asset and reimporting");
-        UnityEditor.AssetImporter.GetAtPath(asset_path).SaveAndReimport();
-        Debug.Log("Saving asset and reimporting done!");
-
         //Set bundle name into prefab
         Debug.Log("Set asset bundle name and variant of " + arg);
         UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, arg);
@@ -49,18 +45,7 @@ public class CustomUnityCli : MonoBehaviour
 
         //Build iOS asset bundles
         Debug.Log("Building iOS asset bundle: " + arg);
-        //BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
-
-        AssetBundleBuild[] buildMap = new AssetBundleBuild[1];
-
-        buildMap[0].assetBundleName = arg;
-
-        string[] assets = new string[1];
-        assets[0] = asset_path;
-        
-        buildMap[0].assetNames = assets;
-
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", buildMap, BuildAssetBundleOptions.None, BuildTarget.iOS);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
         Debug.Log("iOS asset bundle built: " + arg);
     }
 
