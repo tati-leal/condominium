@@ -9,7 +9,7 @@ jobs:
   run-command:
     docker:
       #- image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
-      - image: unityci/editor:ubuntu-2022.1.23f1-ios-1.0.1
+      - image: unityci/editor:ubuntu-2021.3.1f1-ios-1.0.1
     steps:
       - checkout
       - unity/prepare-env
@@ -43,5 +43,5 @@ workflows:
   generate-asset-bundle-workflow:
       jobs:
         - unity/create-activation-file:
-            editor_version: '2022.1.23f1'
+            editor_version: '2021.3.1f1'
         - run-command
