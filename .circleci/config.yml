@@ -42,5 +42,6 @@ jobs:
 workflows:
   generate-asset-bundle-workflow:
       jobs:
+        - unity/create-activation-file:
+            editor_version: '2022.1.23f1'
         - run-command
-        - unity/create-activation-file
