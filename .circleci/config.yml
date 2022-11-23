@@ -12,7 +12,7 @@ jobs:
     macos:
       xcode: 14.1.0
     steps:
-      - checkout
+      #- checkout
       #- unity/prepare-env
       - run:
           name: "Install Unity Hub"
