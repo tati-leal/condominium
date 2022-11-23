@@ -190,6 +190,8 @@ jobs:
       - run:
           name: "mkdir"
           command: |
+            cp -r Server /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
+            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r Assets
             mkdir -p Assets/Scripts/Editor
@@ -207,14 +209,6 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            ls /Applications/
-            echo ""
-            ls /Applications/Unity/
-            echo ""
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/
-            echo ""
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/
-            echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/Server/
