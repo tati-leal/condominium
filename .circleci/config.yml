@@ -13,7 +13,13 @@ jobs:
       xcode: 14.1.0
     steps:
       - checkout
-      - unity/prepare-env
+      #- unity/prepare-env
+      - run:
+          name: "Install Unity Hub"
+          command: brew install --cask unity-hub
+      - run:
+          name: "Install Unity Editor"
+          command: '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module mac-il2cpp --childModules
       - run:
           name: "mkdir"
           command: |
@@ -34,7 +40,7 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            unity-editor -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
+            /Applications/Unity/Hub/Editor//Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
       - store_artifacts:
