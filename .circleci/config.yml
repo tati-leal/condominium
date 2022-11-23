@@ -26,9 +26,6 @@ jobs:
       - run:
           name: "mkdir"
           command: |
-            mkdir -p /root/.cache/unity3d
-            mkdir -p /root/.local/share/unity3d/Unity/
-            set +x
             cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r Assets
             mkdir -p Assets/Scripts/Editor
