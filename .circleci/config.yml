@@ -12,13 +12,7 @@ jobs:
     macos:
       xcode: 14.1.0
     steps:
-      - run:
-          name: "test"
-          command: |
-            readonly unity_license_file_path="/Library/Application Support/Unity"
-            sudo mkdir -p "$unity_license_file_path"
-            sudo chmod -R 777 "$unity_license_file_path"
-      #- checkout
+      - checkout
       #- unity/prepare-env
       - run:
           name: "Install Unity Hub"
@@ -49,6 +43,9 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
+            readonly unity_license_file_path="/Library/Application Support/Unity"
+            sudo mkdir -p "$unity_license_file_path"
+            sudo chmod -R 777 "$unity_license_file_path"
             /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
