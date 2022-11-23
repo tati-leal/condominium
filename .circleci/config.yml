@@ -4,12 +4,11 @@ version: 2.1
 
 orbs:
   unity: game-ci/unity@1.3.0
+  win: circleci/windows@5.0
 
 jobs:
   run-command:
-    resource_class: 'windows.medium'
-    machine:
-      image: editor:windows-2022.1.23f1-universal-windows-platform-1.0.1
+    executor: win/default
     steps:
       #- checkout
       - unity/prepare-env
