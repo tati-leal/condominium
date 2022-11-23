@@ -12,7 +12,7 @@ jobs:
     macos:
       xcode: 14.1.0
     steps:
-      #- checkout
+      - checkout
       #- unity/prepare-env
       #- run:
       #    name: "Install Unity Hub"
@@ -111,6 +111,7 @@ jobs:
                   
                   else
                     readonly resolved_unity_serial="$decoded_unity_serial"
+                    printf '%s\n' "export RESOLVED_UNITY_SERIAL=$resolved_unity_serial" >> "$BASH_ENV"
                   fi
 
                 # Nothing provided.
@@ -206,7 +207,7 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$resolved_unity_serial" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
+            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
       - store_artifacts:
