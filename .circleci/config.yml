@@ -7,22 +7,10 @@ orbs:
 
 jobs:
   run-command:
-    #docker:
-    #  - image: unityci/editor:ubuntu-2021.3.14f1-ios-1.0.1
     macos:
       xcode: 14.1.0
     steps:
       - checkout
-      #- unity/prepare-env
-      #- run:
-      #    name: "Install Unity Hub"
-      #    command: |
-      #      brew install --cask unity-hub
-      #- run:
-      #    name: "Install Unity Editor"
-      #    command: |
-      #      '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module ios --childModules && echo "Unity Editor Installed"
-      #      echo "Unity Editor Installed"
       - run:
           name: "Prepare Env"
           command: |
@@ -192,9 +180,9 @@ jobs:
           command: |
             cp -r Editor /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             cp -r Server /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r Assets
+            rm -r Packages
             mkdir -p Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
             mkdir -p Assets/StreamingAssets
@@ -210,10 +198,6 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
-            echo ""
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/Server/
-            echo ""
             /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
