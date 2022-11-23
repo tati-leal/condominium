@@ -4,62 +4,102 @@ version: 2.1
 
 orbs:
   unity: game-ci/unity@1.3.0
-  win: circleci/windows@5.0
 
 jobs:
   run-command:
-    executor: win/default
+    macos:
+      xcode: 14.1.0
     steps:
-      #- checkout
-      #- unity/prepare-env
+      - checkout
       - run:
-          name: "prepare environment"
+          name: "Prepare Env"
           command: |
-            #!/bin/false
+            readonly unity_hub_path="/Applications/Unity Hub.app/Contents/MacOS/Unity Hub"
 
-            # shellcheck shell=bash
-
-            # shellcheck disable=SC2154
+            readonly unity_editor_path="/Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity"
 
 
-            trap_exit() {
-              local exit_status="$?"
+            printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
 
-              if [ "$exit_status" -ne 0 ]; then
-                printf '%s\n' 'The script did not complete successfully.'
+            printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
 
-                printf '%s\n' "Removing the container \"$container_name\"."
-                docker rm -f "$container_name" &> /dev/null || true
+            check_and_install_unity_hub() {
+              if [ ! -f "$unity_hub_path" ]; then
+                printf '%s\n' "Could not find Unity Hub at \"$unity_hub_path\"."
+                printf '%s\n' "Installing it with brew..."
 
-                exit "$exit_status"
+                brew install --cask unity-hub
+
+                if [ -f "$unity_hub_path" ]; then
+                  printf '%s\n' "Unity Hub installed successfully."
+
+                else
+                  printf '%s\n' "Could not install the Unity Hub."
+                  printf '%s\n' "Please try again or open an issue."
+                  return 1
+                fi
               fi
+
+              return 0
             }
 
-            trap trap_exit EXIT
+            check_and_install_unity_editor() {
+              if [ ! -f "$unity_editor_path" ]; then
+                printf '%s\n' "Could not find the Unity Editor at \"$unity_editor_path\"."
+                printf '%s\n' "Installing it with the Unity Hub..."
+
+                if check_and_install_unity_hub; then
+
+                  if ! command -v npm &> /dev/null; then
+                    printf '%s\n' "npm is required to fetch the Unity Editor changeset."
+                    printf '%s\n' "Please install it and try again."
+                    return 1
+                  fi
+
+                  changeset="$(npx unity-changeset "2021.3.14f1")"
+
+                  set -x
+                  "$unity_hub_path" -- --headless install --version "2021.3.14f1" --changeset "$changeset" --module ios --childModules
+                  set +x
+
+                  if [ -f "$unity_editor_path" ]; then
+                    printf '%s\n' "Unity Editor installed successfully."
+
+                  else
+                    printf '%s\n' "Could not install the Unity Editor."
+                    printf '%s\n' "Please try again or open an issue."
+                    return 1
+                  fi
+                else
+                  printf '%s\n' "Could not install the Editor because Unity Hub is not installed."
+                  return 1
+                fi
+              fi
+
+              return 0
+            }
 
 
             resolve_unity_serial() {
-              local exit_code=0
-
-              if [ -n "$unity_username" ] && [ -n "$unity_password" ]; then
+              if [ -n "$UNITY_USERNAME" ] && [ -n "$UNITY_PASSWORD" ]; then
                 # Serial provided.
                 if [ -n "$unity_serial" ]; then
                   printf '%s\n' "Detected Unity serial."
                   readonly resolved_unity_serial="$unity_serial"
 
                 # License provided.
-                elif [ -n "$unity_encoded_license" ]; then
+                elif [ -n "$UNITY_ENCODED_LICENSE" ]; then
                   printf '%s\n' "No serial detected. Extracting it from the encoded license."
-
+                  
                   if ! extract_serial_from_license; then
                     printf '%s\n' "Failed to parse the serial from the Unity license."
                     printf '%s\n' "Please try again or open an issue."
                     printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation#personal-license"
-
-                    exit_code=1
-
+                    return 1
+                  
                   else
                     readonly resolved_unity_serial="$decoded_unity_serial"
+                    printf '%s\n' "export RESOLVED_UNITY_SERIAL=$resolved_unity_serial" >> "$BASH_ENV"
                   fi
 
                 # Nothing provided.
@@ -67,56 +107,41 @@ jobs:
                   printf '%s\n' "No serial or encoded license found."
                   printf '%s\n' "Please run the script again with a serial or encoded license file."
                   printf '%s\n' "See the docs for more details: https://game.ci/docs/circleci/activation"
-
-                  exit_code=1
+                  return 1
                 fi
               fi
 
-              return "$exit_code"
+              return 0
             }
 
 
             extract_serial_from_license() {
-              export LANG=C.UTF-8
+              # Fix locale setting in PERL.
+              # https://stackoverflow.com/a/7413863
+              export LC_CTYPE=en_US.UTF-8
+              export LC_ALL=en_US.UTF-8 
 
               local unity_license
               local developer_data
               local encoded_serial
 
-              unity_license="$(base64 --decode \<<< "$unity_encoded_license")"
-              developer_data="$(grep -oP '<DeveloperData Value\="\K.*?(?="/>)' \<<< "$unity_license")"
+              unity_license="$(base64 --decode \<<< "$UNITY_ENCODED_LICENSE")"
+              developer_data="$(perl -nle 'print $& while m{<DeveloperData Value\="\K.*?(?="/>)}g' \<<< "$unity_license")"
               encoded_serial="$(cut -c 5- \<<< "$developer_data")"
-
+              
               decoded_unity_serial="$(base64 --decode \<<< "$encoded_serial")"
               readonly decoded_unity_serial
 
               if [ -n "$decoded_unity_serial" ]; then return 0; else return 1; fi
             }
 
+            # Install the Editor if not already installed.
 
-            # Install the Windows 10 SDK.
-
-            choco upgrade windows-sdk-10.1 visualstudio2022-workload-vctools --no-progress -y
-
-
-            # Extract the Windows SDK registry key.
-
-            mkdir -p "$base_dir/regkeys"
-
-            powershell "reg export HKLM\\SOFTWARE\\WOW6432Node\\Microsoft\\\"Microsoft SDKs\"\\Windows\\v10.0 $base_dir/regkeys/winsdk.reg /y"
-
-
-            readonly container_name="${CIRCLE_PROJECT_REPONAME}-${CIRCLE_BUILD_NUM}"
-
-            printf '%s\n' "export CONTAINER_NAME=$container_name" >> "$BASH_ENV"
-
-
-            # Delete any existing containers.
-
-            if docker ps -a | grep -wq "$container_name"; then
-              docker rm -f "$container_name"
+            if ! check_and_install_unity_editor; then
+              printf '%s\n' "Something went wrong."
+              printf '%s\n' "Please try again or open an issue."
+              exit 1
             fi
-
 
             # Check if serial or encoded license was provided.
 
@@ -129,66 +154,55 @@ jobs:
             fi
 
 
-            # Create folders to store artifacts.
+            # If it doesn't exist, create folder for the Unity License File.
 
-            mkdir -p "$base_dir/build" || { printf '%s\n' "Unable to create the build directory"; exit 1; }
+            readonly unity_license_file_path="/Library/Application Support/Unity"
 
-            mkdir -p "$base_dir/test" || { printf '%s\n' "Unable to create the test directory"; exit 1; }
+            sudo mkdir -p "$unity_license_file_path"
 
+            sudo chmod -R 777 "$unity_license_file_path"
+
+            # Activate the Unity Editor.
 
             set -x
 
-
-            # Run the container and prevent it from exiting.
-
-            # shellcheck disable=SC2140
-
-            docker run -dit \
-              --name "$container_name" \
-              --env PROJECT_PATH="C:/unity_project" \
-              --env UNITY_USERNAME="$unity_username" \
-              --env UNITY_PASSWORD="$unity_password" \
-              --env UNITY_SERIAL="$resolved_unity_serial" \
-              --volume "$unity_project_full_path":C:/unity_project \
-              --volume "$base_dir"/regkeys:"C:/regkeys" \
-              --volume "$base_dir"/build:"C:/build" \
-              --volume "$base_dir"/test:"C:/test" \
-              --volume "C:/Program Files (x86)/Microsoft Visual Studio":"C:/Program Files (x86)/Microsoft Visual Studio" \
-              --volume "C:/Program Files (x86)/Windows Kits":"C:/Program Files (x86)/Windows Kits" \
-              --volume "C:/ProgramData/Microsoft/VisualStudio":"C:/ProgramData/Microsoft/VisualStudio" \
-              "unityci/editor:windows-${GAMECI_EDITOR_VERSION}-${GAMECI_TARGET_PLATFORM}-1" \
-              powershell
-
+            "$unity_editor_path" \
+              -batchmode \
+              -quit \
+              -nographics \
+              -username "$UNITY_USERNAME" \
+              -password "$UNITY_PASSWORD" \
+              -serial "$resolved_unity_serial" \
+              -logfile /dev/stdout
             set +x
-
-
-            # Register the Windows SDK and VCC Tools.
-
-            docker exec "$container_name" powershell 'reg import C:\regkeys\winsdk.reg'
-
-            docker exec "$container_name" powershell 'regsvr32 /s C:\ProgramData\Microsoft\VisualStudio\Setup\x64\Microsoft.VisualStudio.Setup.Configuration.Native.dll'
-
-
-            # Activate Unity
-
-            docker exec "$container_name" powershell '& "C:\Program Files\Unity\Hub\Editor\*\Editor\Unity.exe" -batchmode -quit -nographics -username $Env:UNITY_USERNAME -password $Env:UNITY_PASSWORD -serial $Env:UNITY_SERIAL -logfile | Out-Host'
-      #- run:
-      #    name: "Download skp file"
-      #    command: |
-      #      export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
-      #      export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
-      #      echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      #      echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
-      #      curl -o "./Assets/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
-      #      echo ""
-      #- run:
-      #    name: "Build Asset Bundles"
-      #    command: |
-      #      /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
-      #      echo ""
-      #      ls ./Assets/StreamingAssets
-      #- store_artifacts:
-      #    path: ./Assets/StreamingAssets
+      - run:
+          name: "mkdir"
+          command: |
+            cp -r Editor /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
+            cp -r Server /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
+            cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
+            rm -r Assets
+            rm -r Packages
+            mkdir -p Assets/Scripts/Editor
+            cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
+            mkdir -p Assets/StreamingAssets
+      - run:
+          name: "Download skp file"
+          command: |
+            export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
+            export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
+            echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+            echo "export FILE_NAME=$SKP_FILE_NAME" >> $BASH_ENV
+            curl -o "./Assets/$SKP_FILE_NAME" "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
+            echo ""
+      - run:
+          name: "Build Asset Bundles"
+          command: |
+            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
+            echo ""
+            ls ./Assets/StreamingAssets
+      - store_artifacts:
+          path: ./Assets/StreamingAssets
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
