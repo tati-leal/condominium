@@ -12,7 +12,6 @@ jobs:
     steps:
       - checkout
       - unity/prepare-env
-      
       - run:
           name: "mkdir"
           command: |
