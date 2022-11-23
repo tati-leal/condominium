@@ -20,6 +20,7 @@ jobs:
             mkdir -p Assets/Scripts/Editor
             cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
             mkdir -p Assets/StreamingAssets
+            brew install --cask sketchup
       - run:
           name: "Download skp file"
           command: |
