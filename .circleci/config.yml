@@ -16,10 +16,12 @@ jobs:
       #- unity/prepare-env
       - run:
           name: "Install Unity Hub"
-          command: brew install --cask unity-hub
+          command: |
+            brew install --cask unity-hub
       - run:
           name: "Install Unity Editor"
-          command: '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module mac-il2cpp --childModules
+          command: |
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module mac-il2cpp --childModules
       - run:
           name: "mkdir"
           command: |
