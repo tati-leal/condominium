@@ -190,6 +190,7 @@ jobs:
       - run:
           name: "mkdir"
           command: |
+            cp -r Editor /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             cp -r Server /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
             cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
