@@ -93,14 +93,14 @@ jobs:
 
 
             resolve_unity_serial() {
-              if [ -n "$unity_username" ] && [ -n "$unity_password" ]; then
+              if [ -n "$UNITY_USERNAME" ] && [ -n "$UNITY_PASSWORD" ]; then
                 # Serial provided.
                 if [ -n "$unity_serial" ]; then
                   printf '%s\n' "Detected Unity serial."
                   readonly resolved_unity_serial="$unity_serial"
 
                 # License provided.
-                elif [ -n "$unity_encoded_license" ]; then
+                elif [ -n "$UNITY_ENCODED_LICENSE" ]; then
                   printf '%s\n' "No serial detected. Extracting it from the encoded license."
                   
                   if ! extract_serial_from_license; then
@@ -136,7 +136,7 @@ jobs:
               local developer_data
               local encoded_serial
 
-              unity_license="$(base64 --decode \<<< "$unity_encoded_license")"
+              unity_license="$(base64 --decode \<<< "$UNITY_ENCODED_LICENSE")"
               developer_data="$(perl -nle 'print $& while m{<DeveloperData Value\="\K.*?(?="/>)}g' \<<< "$unity_license")"
               encoded_serial="$(cut -c 5- \<<< "$developer_data")"
               
@@ -181,8 +181,8 @@ jobs:
               -batchmode \
               -quit \
               -nographics \
-              -username "$unity_username" \
-              -password "$unity_password" \
+              -username "$UNITY_USERNAME" \
+              -password "$UNITY_PASSWORD" \
               -serial "$resolved_unity_serial" \
               -logfile /dev/stdout
             set +x
