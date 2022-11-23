@@ -26,10 +26,9 @@ jobs:
       - run:
           name: "Prepare Env"
           command: |
-            printf '%s\n' "export UNITY_EDITOR_VERSION=\"2021.3.14f1\"" >> "$BASH_ENV"
             readonly unity_hub_path="/Applications/Unity Hub.app/Contents/MacOS/Unity Hub"
 
-            readonly unity_editor_path="/Applications/Unity/Hub/Editor/$UNITY_EDITOR_VERSION/Unity.app/Contents/MacOS/Unity"
+            readonly unity_editor_path="/Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity"
 
 
             printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
@@ -69,10 +68,10 @@ jobs:
                     return 1
                   fi
 
-                  changeset="$(npx unity-changeset "$UNITY_EDITOR_VERSION")"
+                  changeset="$(npx unity-changeset "2021.3.14f1")"
 
                   set -x
-                  "$unity_hub_path" -- --headless install --version "$UNITY_EDITOR_VERSION" --changeset "$changeset" --module mac-il2cpp --childModules
+                  "$unity_hub_path" -- --headless install --version "2021.3.14f1" --changeset "$changeset" --module mac-il2cpp --childModules
                   set +x
 
                   if [ -f "$unity_editor_path" ]; then
