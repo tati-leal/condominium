@@ -7,8 +7,8 @@ orbs:
 
 jobs:
   run-command:
-    docker:
-      - image: unityci/editor:windows-2022.1.23f1-universal-windows-platform-1.0.1
+    machine:
+      image: unityci/editor:windows-2022.1.23f1-universal-windows-platform-1.0.1
     steps:
       #- checkout
       - unity/prepare-env
