@@ -12,7 +12,7 @@ jobs:
     macos:
       xcode: 14.1.0
     steps:
-      - checkout
+      #- checkout
       #- unity/prepare-env
       - run:
           name: "Install Unity Hub"
@@ -23,6 +23,23 @@ jobs:
           command: |
             '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module ios --childModules && echo "Unity Editor Installed"
             echo "Unity Editor Installed"
+      - run:
+          name: "Resolve Unity Serial"
+          command: |
+            readonly unity_license_file_path="/Library/Application Support/Unity"
+            sudo mkdir -p "$unity_license_file_path"
+            sudo chmod -R 777 "$unity_license_file_path"
+            export LC_CTYPE=en_US.UTF-8
+            export LC_ALL=en_US.UTF-8 
+            local unity_license
+            local developer_data
+            local encoded_serial
+            unity_license="$(base64 --decode \<<< "$unity_encoded_license")"
+            developer_data="$(perl -nle 'print $& while m{<DeveloperData Value\="\K.*?(?="/>)}g' \<<< "$unity_license")"
+            encoded_serial="$(cut -c 5- \<<< "$developer_data")"
+            decoded_unity_serial="$(base64 --decode \<<< "$encoded_serial")"
+            readonly decoded_unity_serial
+            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -batchmode -quit -nographics -username "$unity_username" -password "$unity_password" -serial "$resolved_unity_serial" -logfile /dev/stdout
       - run:
           name: "mkdir"
           command: |
@@ -43,10 +60,7 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
-            readonly unity_license_file_path="/Library/Application Support/Unity"
-            sudo mkdir -p "$unity_license_file_path"
-            sudo chmod -R 777 "$unity_license_file_path"
-            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial F4-QEZA-SJSY-PKB3-FBGV-XXXX -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
+            /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$resolved_unity_serial" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
       - store_artifacts:
