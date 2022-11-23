@@ -12,12 +12,6 @@ jobs:
     macos:
       xcode: 14.1.0
     steps:
-      - run:
-          name: "test dir"
-          command: |
-            ls /Applications/
-            echo ""
-            ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/
       - checkout
       #- unity/prepare-env
       #- run:
@@ -213,10 +207,18 @@ jobs:
       - run:
           name: "Build Asset Bundles"
           command: |
+            ls /Applications/
+            echo ""
+            ls /Applications/Unity/
+            echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/
+            echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/
+            echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/
+            echo ""
             ls /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/Resources/PackageManager/Server/
+            echo ""
             /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType Full -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
