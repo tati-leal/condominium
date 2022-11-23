@@ -199,8 +199,8 @@ jobs:
             /Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity -projectPath . -quit -batchmode -nographics -username "$UNITY_USERNAME" -password "$UNITY_PASSWORD" -serial "$RESOLVED_UNITY_SERIAL" -stackTraceLogType 'Script Only' -executeMethod CustomUnityCli.BuildAssetBundles -logFile /dev/stdout "$FILE_NAME"
             echo ""
             ls ./Assets/StreamingAssets
-      - store_artifacts:
-          path: ./Assets/StreamingAssets
+      #- store_artifacts:
+      #    path: ./Assets/StreamingAssets
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
