@@ -9,7 +9,7 @@ jobs:
   run-command:
     resource_class: 'windows.medium'
     machine:
-      image: unityci/editor:windows-2022.1.23f1-universal-windows-platform-1.0.1
+      image: editor:windows-2022.1.23f1-universal-windows-platform-1.0.1
     steps:
       #- checkout
       - unity/prepare-env
