@@ -21,10 +21,14 @@ jobs:
       - run:
           name: "Install Unity Editor"
           command: |
-            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module ios --childModules
+            '/Applications/Unity Hub.app/Contents/MacOS/Unity Hub' -- --headless install --version '2021.3.14f1' --changeset 'eee1884e7226' --module ios --childModules && echo "Unity Editor Installed"
+            echo "Unity Editor Installed"
       - run:
           name: "mkdir"
           command: |
+            mkdir -p /root/.cache/unity3d
+            mkdir -p /root/.local/share/unity3d/Unity/
+            set +x
             cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
             rm -r Assets
             mkdir -p Assets/Scripts/Editor
