@@ -133,7 +133,6 @@ jobs:
             }
 
             # Install the Editor if not already installed.
-
             if ! check_and_install_unity_editor; then
               printf '%s\n' "Something went wrong."
               printf '%s\n' "Please try again or open an issue."
