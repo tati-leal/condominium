@@ -30,13 +30,13 @@ public class CondominiumCustomScripts : MonoBehaviour
             Directory.CreateDirectory(assetsBundleDirectory);
         }
 
-        Debug.Log(Selection.activeObject.name);
+        Debug.Log("Building AssetBundles for: " + Selection.activeObject.name);
 
         AssetBundleBuild[] build = new AssetBundleBuild[1];
         build[0] = new AssetBundleBuild();
         build[0].assetBundleName = Selection.activeObject.name;
         build[0].assetNames = new string[1] { "Assets/" + Selection.activeObject.name + ".skp" };
-        BuildPipeline.BuildAssetBundles("Assets/", build, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.None, BuildTarget.iOS);
 
     }
 

@@ -43,7 +43,7 @@ public class CustomUnityCli : MonoBehaviour
         build[0] = new AssetBundleBuild();
         build[0].assetBundleName = arg;
         build[0].assetNames = new string[1] { asset_path };
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.None, BuildTarget.iOS);
         Debug.Log("iOS asset bundle built with BundleOption UncompressedAssetBundle");
     }
 
