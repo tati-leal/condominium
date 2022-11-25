@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -30,23 +28,23 @@ public class CustomUnityCli : MonoBehaviour
         //building.transform.localPosition = new Vector3(0, 0, 0);
 
         //Import asset into project
-        Debug.Log("External file import started...");
-        AssetDatabase.ImportAsset(asset_path);
-        Debug.Log("External file import finished!");
-
-        Debug.Log("Saving asset and reimporting");
-        UnityEditor.AssetImporter.GetAtPath(asset_path).SaveAndReimport();
-        Debug.Log("Saving asset and reimporting done!");
+        //Debug.Log("External file import started...");
+        //AssetDatabase.ImportAsset(asset_path);
+        //Debug.Log("External file import finished!");
 
         //Set bundle name into prefab
         Debug.Log("Set asset bundle name and variant of " + arg);
-        UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, arg);
+        UnityEditor.AssetImporter.GetAtPath(asset_path).SetAssetBundleNameAndVariant(arg, "");
         Debug.Log("Asset bundle name and variant set!");
 
         //Build iOS asset bundles
-        Debug.Log("Building iOS asset bundle with BundleOptions NONE");
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
-        Debug.Log("iOS asset bundle built with BundleOption NONE");
+        Debug.Log("Building iOS asset bundle with BundleOptions UncompressedAssetBundle");
+        AssetBundleBuild[] build = new AssetBundleBuild[1];
+        build[0] = new AssetBundleBuild();
+        build[0].assetBundleName = arg;
+        build[0].assetNames = new string[1] { asset_path };
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
+        Debug.Log("iOS asset bundle built with BundleOption UncompressedAssetBundle");
     }
 
     // Helper function for getting the command line arguments

@@ -13,14 +13,34 @@ using System.Reflection;
 using UnityEditor;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 
-public class ComponentsCopier : MonoBehaviour
+public class CondominiumCustomScripts : MonoBehaviour
 {
 
     static List<Transform> transforms_skp = new List<Transform>(); 
-    static List<Transform> transforms = new List<Transform>(); 
+    static List<Transform> transforms = new List<Transform>();
 
-    [MenuItem("GameObject/Copy all components %&C")]
+    [MenuItem("GameObject/Build AssetBundles")]
+    static void BuildAssetBundles()
+    {
+        string assetsBundleDirectory = "Assets/StreamingAssets";
+        if (!Directory.Exists(Application.streamingAssetsPath))
+        {
+            Directory.CreateDirectory(assetsBundleDirectory);
+        }
+
+        Debug.Log(Selection.activeObject.name);
+
+        AssetBundleBuild[] build = new AssetBundleBuild[1];
+        build[0] = new AssetBundleBuild();
+        build[0].assetBundleName = Selection.activeObject.name;
+        build[0].assetNames = new string[1] { "Assets/" + Selection.activeObject.name + ".skp" };
+        BuildPipeline.BuildAssetBundles("Assets/", build, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
+
+    }
+
+    [MenuItem("GameObject/Copy all components")]
     static void Copy()
     {
         DisplayChildren(GameObject.Find("DW06 (1)").transform);
@@ -37,6 +57,126 @@ public class ComponentsCopier : MonoBehaviour
                         } else {
                             ReplaceComponent(skp_component, broken_transform.gameObject);
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    [MenuItem("GameObject/Remove Empty Mesh Colliders")]
+    static void Remove()
+    {
+        RemoveAllEmptyMeshColliders(GameObject.Find("SO FAR").transform);
+    }
+
+    static void RemoveAllEmptyMeshColliders(Transform trans)
+    {
+        foreach (Transform child in trans)
+        {
+            if (child.childCount > 0)
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshCollider))
+                    {
+                        if (((MeshCollider)c).sharedMesh == null)
+                        {
+                            DestroyImmediate(c);
+                        }
+                    }
+                }
+                DisplayChildren(child);
+            }
+            else
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshCollider))
+                    {
+                        if (((MeshCollider)c).sharedMesh == null)
+                        {
+                            DestroyImmediate(c);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    [MenuItem("GameObject/Create MeshCollider on MeshFilter")]
+    static void CreateMeshCollider()
+    {
+        CreateMeshColliderOnMeshFilter(GameObject.Find("SO FAR").transform);
+    }
+
+    static void CreateMeshColliderOnMeshFilter(Transform trans)
+    {
+        foreach (Transform child in trans)
+        {
+            if (child.childCount > 0)
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshFilter))
+                    {
+                        DestroyImmediate(child.gameObject.GetComponent<MeshCollider>());
+                        MeshCollider m = child.gameObject.AddComponent<MeshCollider>();
+                        m.sharedMesh = ((MeshFilter)c).sharedMesh;
+                    }
+                }
+                CreateMeshColliderOnMeshFilter(child);
+            }
+            else
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshFilter))
+                    {
+                        DestroyImmediate(child.gameObject.GetComponent<MeshCollider>());
+                        MeshCollider m = child.gameObject.AddComponent<MeshCollider>();
+                        m.sharedMesh = ((MeshFilter)c).sharedMesh;
+                    }
+                }
+            }
+        }
+    }
+
+    [MenuItem("GameObject/Attach Mashes")]
+    static void Attach()
+    {
+        AttachMeshes(GameObject.Find("SO FAR").transform);
+    }
+
+    static void AttachMeshes(Transform trans)
+    {
+        foreach (Transform child in trans)
+        {
+            if (child.childCount > 0)
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshCollider))
+                    {
+                        DestroyImmediate(c);
+                        child.gameObject.AddComponent<MeshCollider>();
+                    }
+                }
+                AttachMeshes(child);
+            }
+            else
+            {
+                Component[] components = child.GetComponents<Component>();
+                foreach (Component c in components)
+                {
+                    if (c.GetType() == typeof(MeshCollider))
+                    {
+                        DestroyImmediate(c);
+                        child.gameObject.AddComponent<MeshCollider>();
                     }
                 }
             }
