@@ -27,6 +27,11 @@ public class CustomUnityCli : MonoBehaviour
         //GameObject building = AssetDatabase.LoadAssetAtPath(asset_path, typeof(GameObject)) as GameObject;
         //building.transform.localPosition = new Vector3(0, 0, 0);
 
+        Debug.Log("Extracting textures...");
+        ModelImporter modelImporter = AssetImporter.GetAtPath(asset_path) as ModelImporter;
+        modelImporter.ExtractTextures("Assets/Textures/");
+        Debug.Log("Extracting textures finished");
+
         //Import asset into project
         //Debug.Log("External file import started...");
         //AssetDatabase.ImportAsset(asset_path);
@@ -38,13 +43,13 @@ public class CustomUnityCli : MonoBehaviour
         Debug.Log("Asset bundle name and variant set!");
 
         //Build iOS asset bundles
-        Debug.Log("Building iOS asset bundle with BundleOptions UncompressedAssetBundle");
+        Debug.Log("Building iOS asset bundle with BundleOptions None");
         AssetBundleBuild[] build = new AssetBundleBuild[1];
         build[0] = new AssetBundleBuild();
         build[0].assetBundleName = arg;
         build[0].assetNames = new string[1] { asset_path };
         BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.None, BuildTarget.iOS);
-        Debug.Log("iOS asset bundle built with BundleOption UncompressedAssetBundle");
+        Debug.Log("iOS asset bundle built with BundleOption None");
     }
 
     // Helper function for getting the command line arguments
