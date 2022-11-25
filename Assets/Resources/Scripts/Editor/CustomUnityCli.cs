@@ -45,7 +45,7 @@ public class CustomUnityCli : MonoBehaviour
 
         //Build iOS asset bundles
         Debug.Log("Building iOS asset bundle with BundleOptions NONE");
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
         Debug.Log("iOS asset bundle built with BundleOption NONE");
     }
 
