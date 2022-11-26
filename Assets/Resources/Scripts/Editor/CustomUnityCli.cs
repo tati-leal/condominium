@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
@@ -33,9 +35,9 @@ public class CustomUnityCli : MonoBehaviour
         Debug.Log("Extracting textures finished");
 
         //Import asset into project
-        //Debug.Log("External file import started...");
-        //AssetDatabase.ImportAsset(asset_path);
-        //Debug.Log("External file import finished!");
+        Debug.Log("External file import started...");
+        AssetDatabase.ImportAsset(asset_path);
+        Debug.Log("External file import finished!");
 
         //Set bundle name into prefab
         Debug.Log("Set asset bundle name and variant of " + arg);
@@ -43,13 +45,9 @@ public class CustomUnityCli : MonoBehaviour
         Debug.Log("Asset bundle name and variant set!");
 
         //Build iOS asset bundles
-        Debug.Log("Building iOS asset bundle with BundleOptions None");
-        AssetBundleBuild[] build = new AssetBundleBuild[1];
-        build[0] = new AssetBundleBuild();
-        build[0].assetBundleName = arg;
-        build[0].assetNames = new string[1] { asset_path };
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.None, BuildTarget.iOS);
-        Debug.Log("iOS asset bundle built with BundleOption None");
+        Debug.Log("Building iOS asset bundle with BundleOptions NONE");
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
+        Debug.Log("iOS asset bundle built with BundleOption NONE");
     }
 
     // Helper function for getting the command line arguments
