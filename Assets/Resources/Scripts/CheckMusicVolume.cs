@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using TMPro;
+using System.Reflection;
 
 namespace SlimUI.ModernMenu{
 	
@@ -140,21 +141,59 @@ namespace SlimUI.ModernMenu{
 						Scene scene = SceneManager.CreateScene(cadName);
 					  	SceneManager.SetActiveScene(scene);
 
-					  	Material skyMaterial = Resources.Load("Imported/Skyboxes/Materials/Skybox 22_pan", typeof(Material)) as Material;
+					  	Material skyMaterial = Resources.Load("Imported/Skyboxes/Materials/Skybox", typeof(Material)) as Material;
 					  	RenderSettings.skybox = skyMaterial;
 					  	
 					  	GameObject lightGameObject = new GameObject("Sun");
 				        Light lightComp = lightGameObject.AddComponent<Light>();
 				        lightComp.type = LightType.Directional;
-				        lightComp.transform.localPosition = new Vector3(13, 15, 0);
-					  	lightComp.transform.localRotation = Quaternion.Euler(60, -50, 0);
-						RenderSettings.sun = lightComp;
+				        lightComp.transform.localPosition = new Vector3(0, 1000, 0);
+						lightComp.shadows = LightShadows.Hard;
+					  	RenderSettings.sun = lightComp;
+
+						LightingPreset lightingPreset = ScriptableObject.CreateInstance("LightingPreset") as LightingPreset;
+						lightingPreset.AmbientColor = new Gradient();
+						lightingPreset.DirectionalColor = new Gradient();
+						lightingPreset.FogColor = new Gradient();
 
 						Transform[] ts = controls.GetComponentsInChildren<Transform>();
 				        //PlayerArmature
 				        ts[3].localPosition = new Vector3(0, 15, 0);
 
+						//Download assetbundle
 			        	GameObject asset = DownloadHandlerAssetBundle.GetContent(www).LoadAsset(cadName) as GameObject;
+
+						//Set within assetbundle the script to attach the sun
+						asset.AddComponent<LightingManager>();
+
+						Component[] components = asset.GetComponents<Component>();
+
+						//Search for LightManager in order to edit it
+						foreach (Component c in components)
+						{
+							if (c.GetType() == typeof(LightingManager))
+							{
+
+								FieldInfo directionalLightFieldInfo =
+									c.GetType().GetField(
+										"DirectionalLight",
+										BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+									);
+
+
+								FieldInfo presetFieldInfo =
+									c.GetType().GetField(
+										"Preset",
+										BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+									);
+
+								//Set the sun
+								directionalLightFieldInfo.SetValue(c, lightComp);
+
+								//Set the preset for day and night
+								presetFieldInfo.SetValue(c, lightingPreset);
+							}
+						}
 
 						if (asset.name == "DW06") {
 							asset.transform.localPosition = new Vector3(17.35f, 0, 12);

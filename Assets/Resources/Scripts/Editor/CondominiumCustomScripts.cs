@@ -32,11 +32,54 @@ public class CondominiumCustomScripts : MonoBehaviour
 
         Debug.Log("Building AssetBundles for: " + Selection.activeObject.name);
 
-        AssetBundleBuild[] build = new AssetBundleBuild[1];
-        build[0] = new AssetBundleBuild();
-        build[0].assetBundleName = Selection.activeObject.name;
-        build[0].assetNames = new string[1] { "Assets/" + Selection.activeObject.name + ".skp" };
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", build, BuildAssetBundleOptions.None, BuildTarget.iOS);
+        //AssetBundleBuild[] build = new AssetBundleBuild[1];
+        //build[0] = new AssetBundleBuild();
+        //build[0].assetBundleName = Selection.activeObject.name;
+        //build[0].assetNames = new string[1] { "Assets/" + Selection.activeObject.name + ".skp" };
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", /*build,*/ BuildAssetBundleOptions.None, BuildTarget.iOS);
+
+    }
+
+    [MenuItem("GameObject/Add script into asset")]
+    static void AddScriptIntoAsset()
+    {
+        GameObject activeGameObject = Selection.activeGameObject;
+        activeGameObject.AddComponent<LightingManager>();
+        Component[] components = activeGameObject.GetComponents<Component>();
+
+        GameObject lightGameObject = new GameObject("Sun");
+        Light lightComp = lightGameObject.AddComponent<Light>();
+        lightComp.type = LightType.Directional;
+        lightComp.transform.localPosition = new Vector3(0, 1000, 0);
+        lightComp.shadows = LightShadows.Hard;
+
+        LightingPreset lightingPreset = ScriptableObject.CreateInstance("LightingPreset") as LightingPreset;
+        lightingPreset.AmbientColor = new Gradient();
+        lightingPreset.DirectionalColor = new Gradient();
+        lightingPreset.FogColor = new Gradient();
+
+        foreach (Component c in components)
+        {
+            if (c.GetType() == typeof(LightingManager))
+            {
+
+                FieldInfo directionalLightFieldInfo =
+                    c.GetType().GetField(
+                        "DirectionalLight",
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+                    );
+
+
+                FieldInfo presetFieldInfo =
+                    c.GetType().GetField(
+                        "Preset",
+                        BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public
+                    );
+
+                directionalLightFieldInfo.SetValue(c, lightComp);
+                presetFieldInfo.SetValue(c, lightingPreset);
+            }
+        }
 
     }
 
