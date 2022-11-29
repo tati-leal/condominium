@@ -17,6 +17,7 @@ jobs:
           command: |
             readonly unity_hub_path="/Applications/Unity Hub.app/Contents/MacOS/Unity Hub"
             readonly unity_editor_path="/Applications/Unity/Hub/Editor/2021.3.14f1/Unity.app/Contents/MacOS/Unity"
+            
             printf '%s\n' "export UNITY_HUB_PATH=\"$unity_hub_path\"" >> "$BASH_ENV"
             printf '%s\n' "export UNITY_EDITOR_PATH=$unity_editor_path" >> "$BASH_ENV"
             check_and_install_unity_hub() {
@@ -139,12 +140,12 @@ jobs:
       - run:
           name: "Manage skp and project directory"
           command: |
-            cp Assets/Resources/Scripts/Editor/CustomUnityCli.cs ./CustomUnityCli.cs
-            rm -r Assets
-            mkdir -p Assets/Scripts/Editor
-            cp ./CustomUnityCli.cs ./Assets/Scripts/Editor/CustomUnityCli.cs
-            mkdir -p Assets/StreamingAssets
-            
+            rm -r Assets/Resources/Textures
+            rm -r Assets/Resources/Materials
+            rm -r Assets/Resources/Models
+            rm -r Assets/Resources/Imported
+            rm -r Assets/Resources/Prefabs
+
             export SKP_FILE_NAME=$(curl -s 'https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/' | jq '.items[0].name' | tr -d '"')
             export SKP_FILE_TOKEN=$(curl -s "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}" | jq '.downloadTokens' | tr -d '"')
             echo "https://firebasestorage.googleapis.com/v0/b/condominium-unity.appspot.com/o/${SKP_FILE_NAME}?alt=media&token=${SKP_FILE_TOKEN}"
