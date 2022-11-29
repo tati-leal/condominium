@@ -77,10 +77,10 @@ public class CondominiumCustomScripts : MonoBehaviour
 
     }
 
-    [MenuItem("GameObject/Copy all components")]
+    [MenuItem("GameObject/Copy all components and paste on DW06")]
     static void Copy()
     {
-        DisplayChildren(GameObject.Find("DW06 (1)").transform);
+        DisplayChildren(Selection.activeGameObject.transform);
         DisplayChildren2(GameObject.Find("DW06").transform);
 
         foreach (Transform skp_transform in transforms_skp) {
