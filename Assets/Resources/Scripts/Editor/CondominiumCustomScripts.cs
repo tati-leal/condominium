@@ -30,17 +30,11 @@ public class CondominiumCustomScripts : MonoBehaviour
             Directory.CreateDirectory(assetsBundleDirectory);
         }
 
-        Debug.Log("Building AssetBundles for: " + Selection.activeObject.name);
-
-        //AssetBundleBuild[] build = new AssetBundleBuild[1];
-        //build[0] = new AssetBundleBuild();
-        //build[0].assetBundleName = Selection.activeObject.name;
-        //build[0].assetNames = new string[1] { "Assets/" + Selection.activeObject.name + ".skp" };
-        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", /*build,*/ BuildAssetBundleOptions.None, BuildTarget.iOS);
+        BuildPipeline.BuildAssetBundles("Assets/StreamingAssets", BuildAssetBundleOptions.None, BuildTarget.iOS);
 
     }
 
-    [MenuItem("GameObject/Add script into asset")]
+    [MenuItem("GameObject/Add dynamic day/night into asset")]
     static void AddScriptIntoAsset()
     {
         GameObject activeGameObject = Selection.activeGameObject;
@@ -109,7 +103,7 @@ public class CondominiumCustomScripts : MonoBehaviour
     [MenuItem("GameObject/Remove Empty Mesh Colliders")]
     static void Remove()
     {
-        RemoveAllEmptyMeshColliders(GameObject.Find("SO FAR").transform);
+        RemoveAllEmptyMeshColliders(Selection.activeGameObject.transform);
     }
 
     static void RemoveAllEmptyMeshColliders(Transform trans)
@@ -151,7 +145,7 @@ public class CondominiumCustomScripts : MonoBehaviour
     [MenuItem("GameObject/Create MeshCollider on MeshFilter")]
     static void CreateMeshCollider()
     {
-        CreateMeshColliderOnMeshFilter(GameObject.Find("SO FAR").transform);
+        CreateMeshColliderOnMeshFilter(Selection.activeGameObject.transform);
     }
 
     static void CreateMeshColliderOnMeshFilter(Transform trans)
@@ -188,10 +182,10 @@ public class CondominiumCustomScripts : MonoBehaviour
         }
     }
 
-    [MenuItem("GameObject/Attach Mashes")]
+    [MenuItem("GameObject/Attach Meshes")]
     static void Attach()
     {
-        AttachMeshes(GameObject.Find("SO FAR").transform);
+        AttachMeshes(Selection.activeGameObject.transform);
     }
 
     static void AttachMeshes(Transform trans)
