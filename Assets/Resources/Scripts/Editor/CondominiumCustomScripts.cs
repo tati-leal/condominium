@@ -34,7 +34,7 @@ public class CondominiumCustomScripts : MonoBehaviour
 
     }
 
-    [MenuItem("GameObject/Add dynamic day/night into asset")]
+    [MenuItem("GameObject/Add dynamic day and night into asset")]
     static void AddScriptIntoAsset()
     {
         GameObject activeGameObject = Selection.activeGameObject;
