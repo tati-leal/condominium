@@ -163,6 +163,8 @@ namespace SlimUI.ModernMenu{
 						//Download assetbundle
 			        	GameObject asset = DownloadHandlerAssetBundle.GetContent(www).LoadAsset(cadName) as GameObject;
 
+						Debug.Log("Downloaded asset bundle: " + asset);
+
 						//Set within assetbundle the script to attach the sun
 						asset.AddComponent<LightingManager>();
 
